@@ -1,6 +1,20 @@
-## 🚀 How to Test the API (Nova Poshta API)
+# 📦 Nova Poshta API Collection
 
-You can run and test our endpoints completely free of charge using any tool you prefer. No paid subscriptions or cloud limits required:
+This repository provides a comprehensive, ready-to-use API collection for testing and integrating the **Nova Poshta API**. 
+
+It is designed to help developers quickly understand and test endpoints (such as parcel tracking, waybill creation, and shipping cost calculation) without writing boilerplate code from scratch. 
+
+## 🔑 Prerequisites
+To make actual requests to the Nova Poshta API, you will need a personal API Key. 
+1. Log in to your Nova Poshta business account.
+2. Navigate to settings and generate your API Key.
+3. Use this key in the request body/params according to the Nova Poshta documentation.
+
+---
+
+## 🚀 How to Test the API
+
+You can run and test our endpoints completely free of charge using any tool you prefer. No paid subscriptions, cloud limits, or accounts required:
 
 ### Option 1. Via Postman 🚀 (Download & Manual Import)
 Click the button below to view and download the Postman collection file directly from this repository:
