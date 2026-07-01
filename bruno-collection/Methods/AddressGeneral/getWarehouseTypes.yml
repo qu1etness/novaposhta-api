@@ -1,0 +1,298 @@
+info:
+  name: getWarehouseTypes
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  body:
+    type: json
+    data: "{\r
+
+      \   \"apiKey\": \"{{apiKey}}\",\r
+
+      \   \"modelName\": \"AddressGeneral\",\r
+
+      \   \"calledMethod\": \"getWarehouseTypes\",\r
+
+      \   \"methodProperties\": { \r
+
+      \   }\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \   \"apiKey\": \"{{apiKey}}\",\r
+
+          \   \"modelName\": \"AddressGeneral\",\r
+
+          \   \"calledMethod\": \"getWarehouseTypes\",\r
+
+          \   \"methodProperties\": {\r
+
+          \        \r
+
+          \   }\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": true,\r
+
+          \t\"data\": [\r
+
+          \t\t{\r
+
+          \t\t\t\"Ref\": \"6f8c7162-4b72-4b0a-88e5-906948c6a92f\",\r
+
+          \t\t\t\"Description\": \"Поштове відділення з обмеження\",\r
+
+          \t\t\t\"DescriptionRu\": \"Parcel Shop\"\r
+
+          \t\t},\r
+
+          \t\t{\r
+
+          \t\t\t\"Ref\": \"841339c7-591a-42e2-8233-7a0a00f0ed6f\",\r
+
+          \t\t\t\"Description\": \"Поштове(ий)\",\r
+
+          \t\t\t\"DescriptionRu\": \"Почтовое отделение\"\r
+
+          \t\t},\r
+
+          \t\t{\r
+
+          \t\t\t\"Ref\": \"95dc212d-479c-4ffb-a8ab-8c1b9073d0bc\",\r
+
+          \t\t\t\"Description\": \"Поштомат ПриватБанку\",\r
+
+          \t\t\t\"DescriptionRu\": \"Почтомат приват банка\"\r
+
+          \t\t},\r
+
+          \t\t{\r
+
+          \t\t\t\"Ref\": \"9a68df70-0267-42a8-bb5c-37f427e36ee4\",\r
+
+          \t\t\t\"Description\": \"Вантажне(ий)\",\r
+
+          \t\t\t\"DescriptionRu\": \"Грузовое отделение\"\r
+
+          \t\t},\r
+
+          \t\t{\r
+
+          \t\t\t\"Ref\": \"f9316480-5f2d-425d-bc2c-ac7cd29decf0\",\r
+
+          \t\t\t\"Description\": \"Поштомат\",\r
+
+          \t\t\t\"DescriptionRu\": \"Почтомат\"\r
+
+          \t\t}\r
+
+          \t],\r
+
+          \t\"errors\": [],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      body:
+        type: json
+        data: "{\r
+
+          \   \"apiKey\": \"{{apiKey}}\",\r
+
+          \   \"modelName\": \"AddressGeneral\",\r
+
+          \   \"calledMethod\": \"getWarehouseTypes\",\r
+
+          \   \"methodProperties\": {}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": false,\r
+
+          \    \"data\": [],\r
+
+          \    \"errors\": [],\r
+
+          \    \"warnings\": [\r
+
+          \        \"Invalid method properties\"\r
+
+          \    ],\r
+
+          \    \"info\": [],\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      body:
+        type: json
+        data: "{\r
+
+          \   \"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \   \"modelName\": \"AddressGeneral\",\r
+
+          \   \"calledMethod\": \"getWarehouseTypes\",\r
+
+          \   \"methodProperties\": {\r
+
+          \        \r
+
+          \   }\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": false,\r
+
+          \    \"data\": [],\r
+
+          \    \"errors\": [\r
+
+          \        \"API key expired\"\r
+
+          \    ],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": [],\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [\r
+
+          \        \"20000201204\"\r
+
+          \    ],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+
+docs: |-
+  # 🏷️ Get Warehouse Types
+
+  This method belongs to the `AddressGeneral` model. It downloads the complete directory of warehouse types used by Nova Poshta (e.g., Post office, Cargo department, Parcel locker / Postomat).
+
+  💡 **Best Practice for Integration:**  
+  Just like settlements and warehouses, **it is highly recommended to download and store this list in your local database**. You can use this locally stored data to populate a dropdown filter in your user interface, allowing your customers to search specifically for Postomats, direct Delivery, or standard Post offices without making real-time API calls as shown on the screenshot below. You can then use the `Ref` obtained from this response as the `TypeOfWarehouseRef` parameter in the `getWarehouses` method to filter your branch downloads.
+
+  <img src="https://content.pstmn.io/5d471862-3263-4ddb-90f7-efb251d895df/aW1hZ2UucG5n" width="744" height="287">
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  This method does not require any specific parameters to be passed, but the `methodProperties` object itself must be present in the request.
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "AddressGeneral",
+     "calledMethod": "getWarehouseTypes",
+     "methodProperties": {}
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Ref | String | UUID of the warehouse type. Use this to filter branches in `getWarehouses` |
+  | Description | String | Name of the warehouse type in Ukrainian (e.g., "Поштове відділення") |
+  | DescriptionRu | String | Name of the warehouse type in Russian |
+
+  ### Example Response Body
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "Ref": "00000000-0000-0000-0000-000000000000",
+              "Description": "Поштове відділення",
+              "DescriptionRu": "Почтовое отделение"
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": [],
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

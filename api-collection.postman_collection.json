@@ -1,0 +1,1661 @@
+{
+  "info": {
+    "_postman_id": "83af8aa9-2bf3-42b0-ab00-f6ad231895d8",
+    "name": "NovaPoshta API",
+    "description": "# 🚀 Nova Poshta API v2.0 Postman Collection\n\n⚠️ **Note:** This collection is designed for the **domestic delivery API (v2.0)**. If you are looking for the international shipping API, please refer to the [Nova Post International API](https://api.novapost.com/developers/index.html).\n\n## 🔖 How to Get Started\n\n### Step 1: Obtain Your API Key\n\nTo interact with the API, you need a registered account and an API access key.\n\n1. Log in to the [Nova Poshta Dashboard](https://www.google.com/search?q=https://new.novaposhta.ua/dashboard/settings/developers).\n    \n2. Generate your API key in the developer settings section.\n    \n\n🎥 _Need help? Check out this_ [<i>Video Tutorial</i>](https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3DQN6jF63v3VE) _on how to get your key._\n\n🚨 **CRITICAL WARNING: NO SANDBOX ENVIRONMENT**  \nPlease be aware that **there is no test environment** for the NP API v2.0. All requests made from this collection will be sent directly to your **production** personal account.  \n**Make sure to cancel and delete all test shipments** you create! You can manage and delete your test data directly from your [personal dashboard](https://new.novaposhta.ua/dashboard).\n\n### Step 2: Configure Collection Variables\n\nBefore sending your first request, you must configure the environment variables for this collection. Go to the **Variables** tab of this collection and set the following:\n\n- `apiKey`: Paste the API key you generated in Step 1.\n    \n- `baseUrl`: Set the entry point depending on the data format you plan to use.\n    \n    - 👉 **JSON (Default):** `https://api.novaposhta.ua/v2.0/json/`\n        \n    - 👉 **XML:** `https://api.novaposhta.ua/v2.0/xml/`\n        \n\n_Note: Data exchange is carried out securely over HTTPS. Nova Poshta API v2.0 uses POST methods with JSON/XML payloads for almost all operations._\n\n## 📚 Official Resources\n\n- [Official Developer Documentation](https://www.google.com/search?q=https://developers.novaposhta.ua/)\n    \n- [Nova Poshta User Dashboard](https://new.novaposhta.ua/dashboard)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32325810"
+  },
+  "item": [
+    {
+      "name": "Methods",
+      "item": [
+        {
+          "name": "AddressGeneral",
+          "item": [
+            {
+              "name": "getSettlements",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiKey\": \"{{apiKey}}\",\n  \"modelName\": \"AddressGeneral\",\n  \"calledMethod\": \"getSettlements\",\n  \"methodProperties\": {\n        \"AreaRef\": \"\",\n        \"Limit\": \"50\",\n        \"Page\": \"1\",\n        \"RegionRef\": \"\",\n        \"FindByString\": \"Київ\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "## 🏙️ Get Settlements (Cities & Villages)\n\nThis method belongs to the `AddressGeneral` model. It allows you to download the complete directory of settlements (cities, towns, villages) in Ukraine where Nova Poshta provides delivery services. The response includes region and district data for each settlement.\n\n💡 **Best Practice for Integration:**\n\nIt is highly recommended to download this directory and store it in your local database, updating it approximately **once a month**. Avoid making real-time calls to this method during user checkout.\n\n### ⚠️ Important Notes\n\n- **Language Restriction:** String search (`FindByString`) is supported **strictly in Ukrainian**.\n    \n- **Pagination:** The API returns a maximum of 150 records per page. To fetch all data, you must iterate using the `Page` and `Limit` parameters.\n    \n- **HTTP Status Quirk:** The API **always returns HTTP Status 200 OK**, even if there is a logical error in your request payload. You must parse the `success` boolean field in the JSON response to verify if the request was actually successful.\n    \n\n## 📥 Request Parameters (`methodProperties`)\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| Page | String | No | Page number (e.g., \"1\") |\n| Limit | String | No | Max 150 records |\n| FindByString | String | No | Search in Ukrainian (e.g., \"Київ\") |\n| Warehouse | String | No | \"1\" = only with NP branches |\n| AreaRef | String | No | Area UUID |\n| RegionRef | String | No | Region UUID |\n| Ref | String | No | Settlement UUID |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"getSettlements\",\n   \"methodProperties\": {\n      \"AreaRef\": \"00000000-0000-0000-0000-000000000000\",\n      \"Ref\": \"00000000-0000-0000-0000-000000000000\",\n      \"RegionRef\": \"00000000-0000-0000-0000-000000000000\",\n      \"Page\": \"1\",\n      \"Limit\": \"20\",\n      \"Warehouse\": \"1\",\n      \"FindByString\": \"Київ\"\n   }\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Ref | String | Settlement UUID |\n| SettlementType | String | Settlement type UUID |\n| Description | String | Name in Ukrainian |\n| DescriptionRu | String | Name in Russian |\n| DescriptionTranslit | String | Name in transliteration |\n| SettlementTypeDescription | String | Type in Ukrainian (e.g., \"місто\", \"село\") |\n| SettlementTypeDescriptionRu | String | Type in Russian |\n| SettlementTypeDescriptionTranslit | String | Type in transliteration |\n| Region | String | District/region UUID |\n| RegionsDescription | String | District/region name (UA) |\n| RegionsDescriptionRu | String | District/region name (RU) |\n| RegionsDescriptionTranslit | String | District/region name (translit) |\n| Area | String | Area UUID |\n| AreaDescription | String | Area name (UA) |\n| AreaDescriptionRu | String | Area name (RU) |\n| AreaDescriptionTranslit | String | Area name (translit) |\n| Latitude | String | Latitude coordinate |\n| Longitude | String | Longitude coordinate |\n| Warehouse | String | \"1\" = has NP branches, \"0\" = no branches |\n| AddressDeliveryAllowed | Boolean | `true` = courier delivery available |\n| RadiusHomeDelivery | String | Courier delivery radius |\n| RadiusExpressPickUp | String | Express pick-up radius |\n| RadiusDrop | String | Drop-off radius |\n| SpecialCashCheck | Number | \"1\" = special cash check required |\n| Delivery1 | String | Delivery on Monday |\n| Delivery2 | String | Delivery on Tuesday |\n| Delivery3 | String | Delivery on Wednesday |\n| Delivery4 | String | Delivery on Thursday |\n| Delivery5 | String | Delivery on Friday |\n| Delivery6 | String | Delivery on Saturday |\n| Delivery7 | String | Delivery on Sunday |\n| Index1 | String | Primary postal code |\n| Index2 | String | Secondary postal code |\n| IndexCOATSU1 | String | KOATUU code |\n| info.totalCount | Number | Total number of records (root level) |\n\n### Example Response Body\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"Ref\": \"0db2df4b-4b3a-11e4-ab6d-005056801329\",\n            \"SettlementType\": \"563ced13-f210-11e3-8c4a-0050568002cf\",\n            \"Latitude\": \"47.866313000000000\",\n            \"Longitude\": \"31.019312000000000\",\n            \"Description\": \"Київ\",\n            \"DescriptionRu\": \"Червоный Киев\",\n            \"DescriptionTranslit\": \"Kyiv\",\n            \"SettlementTypeDescription\": \"село\",\n            \"SettlementTypeDescriptionRu\": \"село\",\n            \"SettlementTypeDescriptionTranslit\": \"selo\",\n            \"Region\": \"e4ace22a-4b33-11e4-ab6d-005056801329\",\n            \"RegionsDescription\": \"Вознесенський\",\n            \"RegionsDescriptionRu\": \"Вознесенский р-н\",\n            \"RegionsDescriptionTranslit\": \"Voznesenskyi\",\n            \"Area\": \"dcaaddd7-4b33-11e4-ab6d-005056801329\",\n            \"AreaDescription\": \"Миколаївська\",\n            \"AreaDescriptionRu\": \"Николаевская область\",\n            \"AreaDescriptionTranslit\": \"Mykolaivska\",\n            \"Index1\": \"56419\",\n            \"Index2\": \"56419\",\n            \"IndexCOATSU1\": \"4822780907\",\n            \"Delivery1\": \"\",\n            \"Delivery2\": \"\",\n            \"Delivery3\": \"\",\n            \"Delivery4\": \"\",\n            \"Delivery5\": \"\",\n            \"Delivery6\": \"\",\n            \"Delivery7\": \"\",\n            \"SpecialCashCheck\": 1,\n            \"RadiusHomeDelivery\": \"500\",\n            \"RadiusExpressPickUp\": \"500\",\n            \"RadiusDrop\": \"500\",\n            \"Warehouse\": \"0\",\n            \"AddressDeliveryAllowed\": true\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": {\n        \"totalCount\": 9\n    },\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"apiKey\": \"{{apiKey}}\",\r\n  \"modelName\": \"AddressGeneral\",\r\n  \"calledMethod\": \"getSettlements\",\r\n  \"methodProperties\": {\r\n        \"AreaRef\": \"\",\r\n        \"Limit\": \"2\",\r\n        \"Page\": \"1\",\r\n        \"RegionRef\": \"\",\r\n        \"Warehouse\": \"1\",\r\n        \"FindByString\": \"Київ\"\r\n  }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n\t\"success\": true,\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"Ref\": \"0e451e40-4b3a-11e4-ab6d-005056801329\",\r\n\t\t\t\"SettlementType\": \"563ced13-f210-11e3-8c4a-0050568002cf\",\r\n\t\t\t\"Latitude\": \"49.605372000000000\",\r\n\t\t\t\"Longitude\": \"34.335613000000000\",\r\n\t\t\t\"Description\": \"Абазівка\",\r\n\t\t\t\"DescriptionRu\": \"Абазовка\",\r\n\t\t\t\"DescriptionTranslit\": \"Abazivka\",\r\n\t\t\t\"SettlementTypeDescription\": \"село\",\r\n\t\t\t\"SettlementTypeDescriptionRu\": \"село\",\r\n\t\t\t\"SettlementTypeDescriptionTranslit\": \"selo\",\r\n\t\t\t\"Region\": \"e4ade6ea-4b33-11e4-ab6d-005056801329\",\r\n\t\t\t\"RegionsDescription\": \"Полтавський\",\r\n\t\t\t\"RegionsDescriptionRu\": \"Полтавский р-н\",\r\n\t\t\t\"RegionsDescriptionTranslit\": \"Poltavskyi\",\r\n\t\t\t\"Area\": \"dcaadf02-4b33-11e4-ab6d-005056801329\",\r\n\t\t\t\"AreaDescription\": \"Полтавська\",\r\n\t\t\t\"AreaDescriptionRu\": \"Полтавская область\",\r\n\t\t\t\"AreaDescriptionTranslit\": \"Poltavska\",\r\n\t\t\t\"Index1\": \"38715\",\r\n\t\t\t\"Index2\": \"38715\",\r\n\t\t\t\"IndexCOATSU1\": \"5324080101\",\r\n\t\t\t\"Delivery1\": \"1\",\r\n\t\t\t\"Delivery2\": \"0\",\r\n\t\t\t\"Delivery3\": \"1\",\r\n\t\t\t\"Delivery4\": \"0\",\r\n\t\t\t\"Delivery5\": \"1\",\r\n\t\t\t\"Delivery6\": \"0\",\r\n\t\t\t\"Delivery7\": \"0\",\r\n\t\t\t\"SpecialCashCheck\": 1,\r\n\t\t\t\"RadiusHomeDelivery\": \"500\",\r\n\t\t\t\"RadiusExpressPickUp\": \"500\",\r\n\t\t\t\"RadiusDrop\": \"500\",\r\n\t\t\t\"Warehouse\": \"1\",\r\n\t\t\t\"AddressDeliveryAllowed\": true\r\n\t\t}\r\n\t],\r\n\t\"errors\": [],\r\n\t\"warnings\": [],\r\n\t\"info\": {\r\n\t\t\"totalCount\": 26792\r\n\t},\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n\t\"apiKey\": \"{{apiKey}}\",\n\t\"modelName\": \"AddressGeneral\",\n\t\"calledMethod\": \"getSettlements\",\n\t\"methodProperties\": {\n\t\t\"AreaRef\": \"00000000-0000-0000-0000-000000000000\"\n\t}\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": false,\n    \"data\": [],\n    \"errors\": {\n        \"AreaRef\": \"AreaRef not found\"\n    },\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [\n        \"20000501022\"\n    ],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiKey\": \"00000000-0000-0000-0000-000000000000\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"getSettlements\",\n   \"methodProperties\": {\n        \"Page\" : \"1\",\n        \"Warehouse\" : \"1\",\n        \"FindByString\" : \"Київ\",\n        \"Limit\" : \"20\"\n   }\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": false,\r\n\t\"data\": [],\r\n\t\"errors\": [\r\n\t\t\"API key expired\"\r\n\t],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [\r\n\t\t\"20000201204\"\r\n\t],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "getStreet",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"getStreet\",\r\n\t\"methodProperties\": {\r\n\t\t\"CityRef\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n        \"FindByString\": \"Київ\",\r\n        \"Page\": \"1\",\r\n        \"Limit\": \"1\"\r\n\t}\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 🛣️ Get Streets\n\nThis method belongs to the `AddressGeneral` model. It is used to download the directory of streets within a specific settlement where Nova Poshta provides door-to-door delivery.\n\n💡 **Best Practice for Integration:**  \nThis directory is essential when creating waybills (shipments) with delivery types involving a client's address (e.g., Warehouse-to-Door, Door-to-Door). Because large cities have thousands of streets, it is highly recommended to use the `FindByString` parameter to implement real-time search (autocomplete) rather than downloading the entire list.\n\n### ⚠️ Important Notes\n\n- **Mandatory Parameter:** You **must** pass the `CityRef` parameter. You can obtain this UUID by using the `getCities` method.\n    \n- **Language Restriction:** String search (`FindByString`) is supported **strictly in Ukrainian**.\n    \n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n| **Parameter** | **Type** | **Required** | **Description** |\n| --- | --- | --- | --- |\n| `CityRef` | String | **Yes** | Unique UUID of the city. Obtained from the `getCities` method. |\n| `FindByString` | String | No | Search by street name or avenue (e.g., \"Хрещатик\"). |\n| `Page` | String | No | The page number for pagination (e.g., \"1\"). |\n| `Limit` | String | No | Number of records per page. |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"getStreet\",\n   \"methodProperties\": {\n      \"CityRef\": \"00000000-0000-0000-0000-000000000000\",\n      \"FindByString\": \"Хрещатик\",\n      \"Page\": \"1\",\n      \"Limit\": \"50\"\n   }\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Ref | String | Street UUID |\n| Description | String | Name in Ukrainian |\n| DescriptionRu | String | Name in Russian |\n| DescriptionTranslit | String | Name in transliteration |\n| StreetsTypeRef | String | Street type UUID (e.g., street, avenue, lane) |\n| StreetsType | String | Short type in Ukrainian (e.g., \"вул.\", \"просп.\", \"пров.\") |\n| StreetsTypeRu | String | Short type in Russian |\n| StreetsTypeTranslit | String | Short type in transliteration |\n\n### Example Response Body\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"Description\": \"1-а Вишнева\",\n            \"Ref\": \"ef905acd-e1f4-11e5-899e-005056887b8d\",\n            \"StreetsTypeRef\": \"Street\",\n            \"StreetsType\": \"вул.\"\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": {\n        \"totalCount\": 2825\n    },\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"getStreet\",\r\n\t\"methodProperties\": {\r\n\t\t\"CityRef\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n        \"FindByString\": \"Київ\",\r\n        \"Page\": \"1\",\r\n        \"Limit\": \"1\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n\t\"success\": true,\n\t\"data\": [\n\t\t{\n\t\t\t\"Description\": \"Київська (Жуляни)\",\n\t\t\t\"Ref\": \"d4450bcc-0a58-11de-b6f5-001d92f78697\",\n\t\t\t\"StreetsTypeRef\": \"Street\",\n\t\t\t\"StreetsType\": \"вул.\"\n\t\t}\n\t],\n\t\"errors\": [],\n\t\"warnings\": [],\n\t\"info\": {\n\t\t\"totalCount\": 1\n\t},\n\t\"messageCodes\": [],\n\t\"errorCodes\": [],\n\t\"warningCodes\": [],\n\t\"infoCodes\": []\n}\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": {{apiKey}},\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"getStreet\",\r\n\t\"methodProperties\": {\r\n\t\t\"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n\t\"success\": false,\n\t\"data\": [],\n\t\"errors\": [\n\t\t\"CityRef is not specified\"\n\t],\n\t\"warnings\": [],\n\t\"info\": [],\n\t\"messageCodes\": [],\n\t\"errorCodes\": [\n\t\t\"20000900767\"\n\t],\n\t\"warningCodes\": [],\n\t\"infoCodes\": []\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"getStreet\",\r\n\t\"methodProperties\": {\r\n\t\t\"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": false,\n    \"data\": [],\n    \"errors\": [\n        \"API key expired\"\n    ],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [\n        \"20000201204\"\n    ],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "getWarehouses",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\t\"apiKey\": {{apiKey}},\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"getWarehouses\",\r\n\t\"methodProperties\": {\r\n\t\t\"Page\": \"1\",\r\n\t\t\"Limit\": \"1\",\r\n\t\t\"TypeOfWarehouseRef\": \"6f8c7162-4b72-4b0a-88e5-906948c6a92f\"\r\n\t}\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 🏢 Get Warehouses (Branches & Postomats)\n\nThis method belongs to the `Address` model (often called using `AddressGeneral` in the payload). It fetches the directory of Nova Poshta warehouses, including standard branches, cargo departments, and automated parcel lockers (postomats).\n\n💡 **Integration Strategies:**  \nHow you use this method depends entirely on your chosen integration approach:\n\n- **Approach 1 (Real-Time Requests):** You can call this endpoint dynamically during user checkout, but you **MUST** filter it by passing a specific `CityRef` or `SettlementRef`. Do not call this method without filters in real-time, as it will attempt to return the entire country's database.\n    \n- **Approach 2 (Local Synchronization - Recommended):** Do not make real-time requests. Instead, run a scheduled background task (cron job) every night to fetch the entire list (without city filters), update your local database, and serve this data to your users instantly from your own server.\n    \n\n### ⚠️ Important API Quirks\n\n- **HTTP 303 Redirects:** For some large queries without pagination, the API does not return JSON directly. Instead, it returns an **HTTP 303 Redirect** pointing to a cached file. Your HTTP client must be configured to automatically follow redirects.\n    \n\n_Pro Tip: To bypass redirects and always receive a standard 200 OK JSON response, always use the_ `Page` _and_ `Limit` _parameters in your request._\n\n- **6,500 Record Limit:** The API returns a maximum of 6,500 records per response. To download the entire directory (for Local Sync), you must use a loop with the `Page` and `Limit` parameters until the `data` array returns empty. It is highly recommended to fetch data separately by `TypeOfWarehouseRef` to keep payloads manageable.\n    \n\n## 📥 Request Parameters (`methodProperties`)\n\nYou can mix and match these parameters to filter the results.\n\n| **Parameter** | **Type** | **Required** | **Description** |\n| --- | --- | --- | --- |\n| `CityName` | String | No | Filter by city name (in Ukrainian). |\n| `CityRef` | String | No | Filter by City UUID (obtained from `getCities`). |\n| `SettlementRef` | String | No | Filter by Settlement UUID (obtained from `getSettlements`). |\n| `FindByString` | String | No | Search by exact branch name or address. |\n| `WarehouseId` | String | No | Search by the specific branch number (e.g., \"151\"). |\n| `TypeOfWarehouseRef` | String | No | UUID of the warehouse type (e.g., Postomat, Cargo, Parcel). |\n| `PostFinance` | String | No | `\"1\"` to return only branches with a NovaPay cash desk. |\n| `POSTerminal` | String | No | `\"1\"` to return only branches with POS-terminals. |\n| `BicycleParking` | String | No | `\"1\"` to return only branches with bicycle parking. |\n| `Page` | String | No | Page number for pagination (e.g., \"1\"). |\n| `Limit` | String | No | Number of records per page (e.g., \"50\"). |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"getWarehouses\",\n   \"methodProperties\": {\n      \"CityName\": \"Київ\",\n      \"CityRef\": \"00000000-0000-0000-0000-000000000000\",\n      \"Page\": \"1\",\n      \"Limit\": \"50\",\n      \"Language\": \"UA\",\n      \"TypeOfWarehouseRef\": \"00000000-0000-0000-0000-000000000000\",\n      \"WarehouseId\": \"151\"\n   }\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n_Note: The response contains over 30 fields. Below are the most critical ones for integration. More information about fields you can find at link below:_ [getWarehouses docs](https://developers.novaposhta.ua/view/model/a0cf0f5f-8512-11ec-8ced-005056b2dbe1/method/a2322f38-8512-11ec-8ced-005056b2dbe1)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Ref | String | Warehouse UUID |\n| SiteKey | String | Internal warehouse key |\n| Description | String | Full name and address (UA) |\n| DescriptionRu | String | Full name and address (RU) |\n| DescriptionTranslit | String | Full name and address (translit) |\n| ShortAddress | String | Short address (UA) |\n| ShortAddressRu | String | Short address (RU) |\n| ShortAddressTranslit | String | Short address (translit) |\n| Phone | String | Contact phone number |\n| TypeOfWarehouse | String | Warehouse type UUID |\n| Number | String | Branch number (e.g., \"1\") |\n| CityRef | String | City UUID |\n| CityDescription | String | City name (UA) |\n| CityDescriptionRu | String | City name (RU) |\n| CityDescriptionTranslit | String | City name (translit) |\n| SettlementRef | String | Settlement UUID |\n| SettlementDescription | String | Settlement name (UA) |\n| SettlementDescriptionRu | String | Settlement name (RU) |\n| SettlementDescriptionTranslit | String | Settlement name (translit) |\n| SettlementAreaDescription | String | Area name (UA) |\n| SettlementAreaDescriptionRu | String | Area name (RU) |\n| SettlementAreaDescriptionTranslit | String | Area name (translit) |\n| SettlementRegionsDescription | String | Region name (UA) |\n| SettlementRegionsDescriptionRu | String | Region name (RU) |\n| SettlementRegionsDescriptionTranslit | String | Region name (translit) |\n| SettlementTypeDescription | String | Settlement type (UA) |\n| SettlementTypeDescriptionRu | String | Settlement type (RU) |\n| SettlementTypeDescriptionTranslit | String | Settlement type (translit) |\n| Longitude | String | Longitude coordinate |\n| Latitude | String | Latitude coordinate |\n| PostFinance | String | \"1\" = has NovaPay cash desk |\n| BicycleParking | String | \"1\" = bicycle parking available |\n| PaymentAccess | String | \"1\" = payment available |\n| POSTerminal | String | \"1\" = POS terminal available |\n| InternationalShipping | String | \"1\" = international shipping available |\n| SelfServiceWorkplacesCount | String | Number of self-service terminals |\n| TotalMaxWeightAllowed | String | Max total weight (kg), \"0\" = unlimited |\n| PlaceMaxWeightAllowed | String | Max weight per parcel (kg) |\n| SendingLimitationsOnDimensions | Object | Max sending dimensions (W/H/L) |\n| ReceivingLimitationsOnDimensions | Object | Max receiving dimensions (W/H/L) |\n| Reception | Object | Reception time windows |\n| Delivery | Object | Delivery time windows |\n| Schedule | Object | Working hours by days |\n| DistrictCode | String | Internal district code |\n| WarehouseStatus | String | Operational status |\n| WarehouseStatusDate | String | Status last updated timestamp |\n| WarehouseIllusha | String | Internal status parameter |\n| CategoryOfWarehouse | String | Category (e.g., \"Branch\", \"Postomat\") |\n| Direct | String | Internal routing code |\n| RegionCity | String | Main hub city |\n| WarehouseForAgent | String | \"1\" = available for agents |\n| GeneratorEnabled | String | \"1\" = has generator |\n| MaxDeclaredCost | String | Max declared value |\n| WorkInMobileAwis | String | Mobile AWIS compatibility |\n| DenyToSelect | String | \"1\" = not selectable |\n| CanGetMoneyTransfer | String | \"1\" = money transfer available |\n| HasMirror | String | \"1\" = mirror available |\n| HasFittingRoom | String | \"1\" = fitting room available |\n| OnlyReceivingParcel | String | \"1\" = only receiving parcels |\n| PostMachineType | String | Postomat type |\n| PostalCodeUA | String | Postal code |\n| WarehouseIndex | String | Internal index |\n| BeaconCode | String | Beacon identifier |\n| Location | String | Internal geolocation field |\n| info.totalCount | Number | Total number of warehouses |\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"SiteKey\": \"7\",\n            \"Description\": \"Відділення №1: вул. Броварська, 2\",\n            \"DescriptionRu\": \"Отделение №1: ул. Броварская, 2\",\n            \"ShortAddress\": \"Бориспіль, Броварська, 2\",\n            \"ShortAddressRu\": \"Борисполь, Броварська, 2\",\n            \"Phone\": \"380800500609\",\n            \"TypeOfWarehouse\": \"9a68df70-0267-42a8-bb5c-37f427e36ee4\",\n            \"Ref\": \"1ec09d2d-e1c2-11e3-8c4a-0050568002cf\",\n            \"Number\": \"1\",\n            \"CityRef\": \"db5c88d4-391c-11dd-90d9-001a92567626\",\n            \"CityDescription\": \"Бориспіль\",\n            \"CityDescriptionRu\": \"Борисполь\",\n            \"SettlementRef\": \"e714e1ce-4b33-11e4-ab6d-005056801329\",\n            \"SettlementDescription\": \"Бориспіль\",\n            \"SettlementAreaDescription\": \"Київська\",\n            \"SettlementRegionsDescription\": \"\",\n            \"SettlementTypeDescription\": \"місто\",\n            \"SettlementTypeDescriptionRu\": \"город\",\n            \"Longitude\": \"30.921920177300000\",\n            \"Latitude\": \"50.367977147000000\",\n            \"PostFinance\": \"0\",\n            \"BicycleParking\": \"0\",\n            \"PaymentAccess\": \"1\",\n            \"POSTerminal\": \"1\",\n            \"InternationalShipping\": \"1\",\n            \"SelfServiceWorkplacesCount\": \"1\",\n            \"TotalMaxWeightAllowed\": \"0\",\n            \"PlaceMaxWeightAllowed\": \"1100\",\n            \"SendingLimitationsOnDimensions\": {\n                \"Width\": 170,\n                \"Height\": 200,\n                \"Length\": 600\n            },\n            \"ReceivingLimitationsOnDimensions\": {\n                \"Width\": 170,\n                \"Height\": 200,\n                \"Length\": 600\n            },\n            \"Reception\": {\n                \"Monday\": \"08:00-20:00\",\n                \"Tuesday\": \"08:00-20:00\",\n                \"Wednesday\": \"08:00-20:00\",\n                \"Thursday\": \"08:00-20:00\",\n                \"Friday\": \"08:00-20:00\",\n                \"Saturday\": \"09:00-19:00\",\n                \"Sunday\": \"09:00-19:00\"\n            },\n            \"Delivery\": {\n                \"Monday\": \"08:00-20:00\",\n                \"Tuesday\": \"08:00-20:00\",\n                \"Wednesday\": \"08:00-20:00\",\n                \"Thursday\": \"08:00-20:00\",\n                \"Friday\": \"08:00-20:00\",\n                \"Saturday\": \"09:00-19:00\",\n                \"Sunday\": \"09:00-19:00\"\n            },\n            \"Schedule\": {\n                \"Monday\": \"08:00-21:00\",\n                \"Tuesday\": \"08:00-21:00\",\n                \"Wednesday\": \"08:00-21:00\",\n                \"Thursday\": \"08:00-21:00\",\n                \"Friday\": \"08:00-21:00\",\n                \"Saturday\": \"09:00-19:00\",\n                \"Sunday\": \"09:00-19:00\"\n            },\n            \"DistrictCode\": \"БОР/Сх/В1\",\n            \"WarehouseStatus\": \"Working\",\n            \"WarehouseStatusDate\": \"2022-03-16 00:00:00\",\n            \"WarehouseIllusha\": \"0\",\n            \"CategoryOfWarehouse\": \"Branch\",\n            \"Direct\": \"\",\n            \"RegionCity\": \"КИЇВ СХІД ПОСИЛКОВИЙ\",\n            \"WarehouseForAgent\": \"0\",\n            \"GeneratorEnabled\": \"1\",\n            \"MaxDeclaredCost\": \"0\",\n            \"WorkInMobileAwis\": \"0\",\n            \"DenyToSelect\": \"0\",\n            \"CanGetMoneyTransfer\": \"0\",\n            \"HasMirror\": \"0\",\n            \"HasFittingRoom\": \"0\",\n            \"OnlyReceivingParcel\": \"0\",\n            \"PostMachineType\": \"\",\n            \"PostalCodeUA\": \"08303\",\n            \"WarehouseIndex\": \"13/1\",\n            \"BeaconCode\": \"\",\n            \"Location\": \"\"\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": {\n        \"totalCount\": 196\n    },\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": {{apiKey}},\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"getWarehouses\",\r\n\t\"methodProperties\": {\r\n\t\t\"Page\": \"1\",\r\n\t\t\"Limit\": \"1\",\r\n\t\t\"TypeOfWarehouseRef\": \"6f8c7162-4b72-4b0a-88e5-906948c6a92f\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\n\t\"success\": true,\n\t\"data\": [\n\t\t{\n\t\t\t\"SiteKey\": \"61362\",\n\t\t\t\"Description\": \"Пункт приймання-видачі (до 30 кг): вул. Квітнева, 15А\",\n\t\t\t\"DescriptionRu\": \"Пункт приема-выдачи (до 30 кг.):ул. Цветочная, 15А\",\n\t\t\t\"ShortAddress\": \"Миньківці, Квітнева, 15А\",\n\t\t\t\"ShortAddressRu\": \"\",\n\t\t\t\"Phone\": \"380800500609\",\n\t\t\t\"TypeOfWarehouse\": \"841339c7-591a-42e2-8233-7a0a00f0ed6f\",\n\t\t\t\"Ref\": \"f220c0ef-fd3c-11ed-9eb1-d4f5ef0df2b8\",\n\t\t\t\"Number\": \"1\",\n\t\t\t\"CityRef\": \"a8a20d8b-fba0-11ed-a361-48df37b92096\",\n\t\t\t\"CityDescription\": \"Миньківці (Київська обл.)\",\n\t\t\t\"CityDescriptionRu\": \"Миньковцы (Киевская обл.)\",\n\t\t\t\"SettlementRef\": \"0e965a11-4b3a-11e4-ab6d-005056801329\",\n\t\t\t\"SettlementDescription\": \"Миньківці\",\n\t\t\t\"SettlementAreaDescription\": \"Київська\",\n\t\t\t\"SettlementRegionsDescription\": \"Сквирський\",\n\t\t\t\"SettlementTypeDescription\": \"село\",\n\t\t\t\"SettlementTypeDescriptionRu\": \"село\",\n\t\t\t\"Longitude\": \"29.479210000000000\",\n\t\t\t\"Latitude\": \"49.796065000000000\",\n\t\t\t\"PostFinance\": \"0\",\n\t\t\t\"BicycleParking\": \"0\",\n\t\t\t\"PaymentAccess\": \"0\",\n\t\t\t\"POSTerminal\": \"0\",\n\t\t\t\"InternationalShipping\": \"0\",\n\t\t\t\"SelfServiceWorkplacesCount\": \"0\",\n\t\t\t\"TotalMaxWeightAllowed\": \"30\",\n\t\t\t\"PlaceMaxWeightAllowed\": \"0\",\n\t\t\t\"SendingLimitationsOnDimensions\": {\n\t\t\t\t\"Width\": 120,\n\t\t\t\t\"Height\": 120,\n\t\t\t\t\"Length\": 120\n\t\t\t},\n\t\t\t\"ReceivingLimitationsOnDimensions\": {\n\t\t\t\t\"Width\": 120,\n\t\t\t\t\"Height\": 120,\n\t\t\t\t\"Length\": 120\n\t\t\t},\n\t\t\t\"Reception\": {\n\t\t\t\t\"Monday\": \"09:00-17:00\",\n\t\t\t\t\"Tuesday\": \"09:00-17:00\",\n\t\t\t\t\"Wednesday\": \"09:00-17:00\",\n\t\t\t\t\"Thursday\": \"09:00-17:00\",\n\t\t\t\t\"Friday\": \"09:00-17:00\",\n\t\t\t\t\"Saturday\": \"09:00-17:00\",\n\t\t\t\t\"Sunday\": \"-\"\n\t\t\t},\n\t\t\t\"Delivery\": {\n\t\t\t\t\"Monday\": \"09:00-14:50\",\n\t\t\t\t\"Tuesday\": \"09:00-14:50\",\n\t\t\t\t\"Wednesday\": \"09:00-14:50\",\n\t\t\t\t\"Thursday\": \"09:00-14:50\",\n\t\t\t\t\"Friday\": \"09:00-14:50\",\n\t\t\t\t\"Saturday\": \"09:00-14:50\",\n\t\t\t\t\"Sunday\": \"-\"\n\t\t\t},\n\t\t\t\"Schedule\": {\n\t\t\t\t\"Monday\": \"09:00-17:00\",\n\t\t\t\t\"Tuesday\": \"09:00-17:00\",\n\t\t\t\t\"Wednesday\": \"09:00-17:00\",\n\t\t\t\t\"Thursday\": \"09:00-17:00\",\n\t\t\t\t\"Friday\": \"09:00-17:00\",\n\t\t\t\t\"Saturday\": \"09:00-17:00\",\n\t\t\t\t\"Sunday\": \"-\"\n\t\t\t},\n\t\t\t\"DistrictCode\": \"БЦ_СквиМин\",\n\t\t\t\"WarehouseStatus\": \"Working\",\n\t\t\t\"WarehouseStatusDate\": \"2023-06-01 00:00:00\",\n\t\t\t\"WarehouseIllusha\": \"0\",\n\t\t\t\"CategoryOfWarehouse\": \"Store\",\n\t\t\t\"Direct\": \"\",\n\t\t\t\"RegionCity\": \"КИЇВ ЗАХІД ПОСИЛКОВИЙ\",\n\t\t\t\"WarehouseForAgent\": \"1\",\n\t\t\t\"GeneratorEnabled\": \"0\",\n\t\t\t\"MaxDeclaredCost\": \"29000\",\n\t\t\t\"WorkInMobileAwis\": \"0\",\n\t\t\t\"DenyToSelect\": \"0\",\n\t\t\t\"CanGetMoneyTransfer\": \"0\",\n\t\t\t\"HasMirror\": \"0\",\n\t\t\t\"HasFittingRoom\": \"0\",\n\t\t\t\"OnlyReceivingParcel\": \"0\",\n\t\t\t\"PostMachineType\": \"\",\n\t\t\t\"PostalCodeUA\": \"09012\",\n\t\t\t\"WarehouseIndex\": \"12157/1\",\n\t\t\t\"BeaconCode\": \"\",\n\t\t\t\"Location\": \"\"\n\t\t}\n\t],\n\t\"errors\": [],\n\t\"warnings\": [],\n\t\"info\": {\n\t\t\"totalCount\": 13232\n\t},\n\t\"messageCodes\": [],\n\t\"errorCodes\": [],\n\t\"warningCodes\": [],\n\t\"infoCodes\": []\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": {{apiKey}},\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"getStreet\",\r\n\t\"methodProperties\": {\r\n\t\t\"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n\t\"success\": false,\n\t\"data\": [],\n\t\"errors\": [\n\t\t\"TypeOfWarehouseRef is incorrect\"\n\t],\n\t\"warnings\": [],\n\t\"info\": [],\n\t\"messageCodes\": [],\n\t\"errorCodes\": [\n\t\t\"20000501333\"\n\t],\n\t\"warningCodes\": [],\n\t\"infoCodes\": []\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n   \"apiKey\": \"00000000-0000-0000-0000-000000000000\",  \r\n   \"modelName\": \"AddressGeneral\",\r\n   \"calledMethod\": \"getWarehouses\",\r\n   \"methodProperties\": {\r\n        \"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r\n   }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": false,\r\n    \"data\": [],\r\n    \"errors\": [\r\n        \"API key expired\"\r\n    ],\r\n    \"warnings\": [],\r\n    \"info\": [],\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [\r\n        \"20000201204\"\r\n    ],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "getWarehouseTypes",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n   \"apiKey\": \"{{apiKey}}\",\r\n   \"modelName\": \"AddressGeneral\",\r\n   \"calledMethod\": \"getWarehouseTypes\",\r\n   \"methodProperties\": { \r\n   }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 🏷️ Get Warehouse Types\n\nThis method belongs to the `AddressGeneral` model. It downloads the complete directory of warehouse types used by Nova Poshta (e.g., Post office, Cargo department, Parcel locker / Postomat).\n\n💡 **Best Practice for Integration:**  \nJust like settlements and warehouses, **it is highly recommended to download and store this list in your local database**. You can use this locally stored data to populate a dropdown filter in your user interface, allowing your customers to search specifically for Postomats, direct Delivery, or standard Post offices without making real-time API calls as shown on the screenshot below. You can then use the `Ref` obtained from this response as the `TypeOfWarehouseRef` parameter in the `getWarehouses` method to filter your branch downloads.\n\n<img src=\"https://content.pstmn.io/5d471862-3263-4ddb-90f7-efb251d895df/aW1hZ2UucG5n\" width=\"744\" height=\"287\">\n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\nThis method does not require any specific parameters to be passed, but the `methodProperties` object itself must be present in the request.\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"getWarehouseTypes\",\n   \"methodProperties\": {}\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Ref | String | UUID of the warehouse type. Use this to filter branches in `getWarehouses` |\n| Description | String | Name of the warehouse type in Ukrainian (e.g., \"Поштове відділення\") |\n| DescriptionRu | String | Name of the warehouse type in Russian |\n\n### Example Response Body\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"Ref\": \"00000000-0000-0000-0000-000000000000\",\n            \"Description\": \"Поштове відділення\",\n            \"DescriptionRu\": \"Почтовое отделение\"\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n   \"apiKey\": \"{{apiKey}}\",\r\n   \"modelName\": \"AddressGeneral\",\r\n   \"calledMethod\": \"getWarehouseTypes\",\r\n   \"methodProperties\": {\r\n        \r\n   }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": true,\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"Ref\": \"6f8c7162-4b72-4b0a-88e5-906948c6a92f\",\r\n\t\t\t\"Description\": \"Поштове відділення з обмеження\",\r\n\t\t\t\"DescriptionRu\": \"Parcel Shop\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"Ref\": \"841339c7-591a-42e2-8233-7a0a00f0ed6f\",\r\n\t\t\t\"Description\": \"Поштове(ий)\",\r\n\t\t\t\"DescriptionRu\": \"Почтовое отделение\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"Ref\": \"95dc212d-479c-4ffb-a8ab-8c1b9073d0bc\",\r\n\t\t\t\"Description\": \"Поштомат ПриватБанку\",\r\n\t\t\t\"DescriptionRu\": \"Почтомат приват банка\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"Ref\": \"9a68df70-0267-42a8-bb5c-37f427e36ee4\",\r\n\t\t\t\"Description\": \"Вантажне(ий)\",\r\n\t\t\t\"DescriptionRu\": \"Грузовое отделение\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"Ref\": \"f9316480-5f2d-425d-bc2c-ac7cd29decf0\",\r\n\t\t\t\"Description\": \"Поштомат\",\r\n\t\t\t\"DescriptionRu\": \"Почтомат\"\r\n\t\t}\r\n\t],\r\n\t\"errors\": [],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n   \"apiKey\": \"{{apiKey}}\",\r\n   \"modelName\": \"AddressGeneral\",\r\n   \"calledMethod\": \"getWarehouseTypes\",\r\n   \"methodProperties\": {}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": false,\r\n    \"data\": [],\r\n    \"errors\": [],\r\n    \"warnings\": [\r\n        \"Invalid method properties\"\r\n    ],\r\n    \"info\": [],\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n   \"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r\n   \"modelName\": \"AddressGeneral\",\r\n   \"calledMethod\": \"getWarehouseTypes\",\r\n   \"methodProperties\": {\r\n        \r\n   }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": false,\r\n    \"data\": [],\r\n    \"errors\": [\r\n        \"API key expired\"\r\n    ],\r\n    \"warnings\": [],\r\n    \"info\": [],\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [\r\n        \"20000201204\"\r\n    ],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "searchSettlement",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"apiKey\": \"{{apiKey}}\",\n\t\"modelName\": \"AddressGeneral\",\n\t\"calledMethod\": \"searchSettlements\",\n\t\"methodProperties\": {\n\t\t\"CityName\": \"Київ\",\n\t\t\"Limit\": \"2\",\n\t\t\"Page\": \"1\"\n\t}\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 🔍 Search Settlements (Online Search)\n\nThis method belongs to the `AddressGeneral`. It allows you to perform a **REAL-TIME online search** for settlements.\n\n💡 **Best Practice for Integration:**  \nUse this method if you chose **Integration Approach 1 (Real-Time Search)**. With this method, you do not need to download, store, or update the massive directories of settlements on your server. You simply call this endpoint on the fly when the user types a city name in your checkout form.\n\n### ⚠️ Important Notes\n\n- **Language Restriction:** The search string (`CityName`) **must be in Ukrainian**.\n    \n- **Ready-to-Use UI String:** The response includes a `Present` field, which contains a pre-formatted string (e.g., \"м. Київ, Київська обл.\"). You can display this directly in your frontend dropdown menu to save time on formatting.\n    \n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n| **Parameter** | **Type** | **Required** | **Description** |\n| --- | --- | --- | --- |\n| `CityName` | String | **Yes** | The name of the settlement to search for. **Must be in Ukrainian** (e.g., \"Київ\"). |\n| `Page` | String | No | The page number for pagination (e.g., \"1\"). |\n| `Limit` | String | No | Number of records per page (e.g., \"50\"). |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"searchSettlements\",\n   \"methodProperties\": {\n      \"CityName\": \"Київ\",\n      \"Limit\": \"50\",\n      \"Page\": \"1\"\n   }\n}\n\n ```\n\n## 📤 Response Parameters (`data[0].Addresses` array items)\n\nThe search results are nested inside the `Addresses` array within the first object of the `data` array.\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| TotalCount | Number | Total number of found settlements |\n| Present | String | Formatted string with type, name, and region (e.g., \"м. Львів, Львівська обл.\") |\n| Ref | String | Settlement UUID |\n| DeliveryCity | String | UUID used for routing in waybills |\n| MainDescription | String | Settlement name (e.g., \"Львів\") |\n| Area | String | Area (область) |\n| Region | String | District/region (район) |\n| Warehouses | Number | Number of active NP branches |\n| AddressDeliveryAllowed | Boolean | `true` = courier delivery available |\n| StreetsAvailability | Boolean | `true` = streets directory available |\n| SettlementTypeCode | String | Short settlement type (e.g., \"м.\", \"с.\") |\n\n### Example Response Body\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"TotalCount\": 8,\n            \"Addresses\": [\n                {\n                    \"Present\": \"м. Львів, Львівська обл.\",\n                    \"Warehouses\": 3578,\n                    \"MainDescription\": \"Львів\",\n                    \"Area\": \"Львівська\",\n                    \"Region\": \"\",\n                    \"SettlementTypeCode\": \"м.\",\n                    \"Ref\": \"e71abb60-4b33-11e4-ab6d-005056801329\",\n                    \"DeliveryCity\": \"db5c88f5-391c-11dd-90d9-001a92567626\",\n                    \"AddressDeliveryAllowed\": true,\n                    \"StreetsAvailability\": true,\n                    \"ParentRegionTypes\": \"область\",\n                    \"ParentRegionCode\": \"обл.\",\n                    \"RegionTypes\": \"\",\n                    \"RegionTypesCode\": \"\"\n                }\n            ]\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"searchSettlements\",\r\n\t\"methodProperties\": {\r\n\t\t\"CityName\": \"Львів\",\r\n\t\t\"Limit\": \"2\",\r\n\t\t\"Page\": \"1\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n\t\"success\": true,\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"TotalCount\": 8,\r\n\t\t\t\"Addresses\": [\r\n\t\t\t\t{\r\n\t\t\t\t\t\"Present\": \"м. Львів, Львівська обл.\",\r\n\t\t\t\t\t\"Warehouses\": 3578,\r\n\t\t\t\t\t\"MainDescription\": \"Львів\",\r\n\t\t\t\t\t\"Area\": \"Львівська\",\r\n\t\t\t\t\t\"Region\": \"\",\r\n\t\t\t\t\t\"SettlementTypeCode\": \"м.\",\r\n\t\t\t\t\t\"Ref\": \"e71abb60-4b33-11e4-ab6d-005056801329\",\r\n\t\t\t\t\t\"DeliveryCity\": \"db5c88f5-391c-11dd-90d9-001a92567626\",\r\n\t\t\t\t\t\"AddressDeliveryAllowed\": true,\r\n\t\t\t\t\t\"StreetsAvailability\": true,\r\n\t\t\t\t\t\"ParentRegionTypes\": \"область\",\r\n\t\t\t\t\t\"ParentRegionCode\": \"обл.\",\r\n\t\t\t\t\t\"RegionTypes\": \"\",\r\n\t\t\t\t\t\"RegionTypesCode\": \"\"\r\n\t\t\t\t},\r\n\t\t\t\t{\r\n\t\t\t\t\t\"Present\": \"м. Миколаїв, Стрийський р-н, Львівська обл.\",\r\n\t\t\t\t\t\"Warehouses\": 8,\r\n\t\t\t\t\t\"MainDescription\": \"Миколаїв\",\r\n\t\t\t\t\t\"Area\": \"Львівська\",\r\n\t\t\t\t\t\"Region\": \"Стрийський\",\r\n\t\t\t\t\t\"SettlementTypeCode\": \"м.\",\r\n\t\t\t\t\t\"Ref\": \"e71b1300-4b33-11e4-ab6d-005056801329\",\r\n\t\t\t\t\t\"DeliveryCity\": \"acecfca8-1488-11df-8caf-000c2965ae0e\",\r\n\t\t\t\t\t\"AddressDeliveryAllowed\": true,\r\n\t\t\t\t\t\"StreetsAvailability\": false,\r\n\t\t\t\t\t\"ParentRegionTypes\": \"область\",\r\n\t\t\t\t\t\"ParentRegionCode\": \"обл.\",\r\n\t\t\t\t\t\"RegionTypes\": \"район\",\r\n\t\t\t\t\t\"RegionTypesCode\": \"р-н\"\r\n\t\t\t\t}\r\n\t\t\t]\r\n\t\t}\r\n\t],\r\n\t\"errors\": [],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"searchSettlementStreets\",\n   \"methodProperties\": {\n        \"StreetName\" : \"ss\",\n        \"Limit\" : \"2\",\n        \"Page\": \"1\"\n   }\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": false,\n    \"data\": [],\n    \"errors\": [\n        \"CityName has invalid characters\"\n    ],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [\n        \"20000500652\"\n    ],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"searchSettlement\",\n   \"methodProperties\": {\n        \"StreetName\" : \"Хрещатик\",\n        \"SettlementRef\" : \"00000000-0000-0000-0000-000000000000\",\n        \"Limit\" : \"50\"\n   }\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": false,\r\n    \"data\": [],\r\n    \"errors\": [\r\n        \"API key expired\"\r\n    ],\r\n    \"warnings\": [],\r\n    \"info\": [],\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [\r\n        \"20000201204\"\r\n    ],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "searchSettlementsStreets",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"apiKey\": \"{{apiKey}}\",\n\t\"modelName\": \"AddressGeneral\",\n\t\"calledMethod\": \"searchSettlementStreets\",\n\t\"methodProperties\": {\n\t\t\"StreetName\": \"Хрещатик\",\n\t\t\"SettlementRef\": \"e718a680-4b33-11e4-ab6d-005056801329\"\n\t}\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 🛣️ Search Settlement Streets (Online Search)\n\nThis method belongs to the `AddressGeneral.` It allows you to perform a **REAL-TIME online search** for streets within a specific settlement.\n\n💡 **Integration Strategies:**  \nUse this method for **Approach 1 (Real-Time Requests)**. When a user selects door-to-door delivery, you do not need to download the massive street directories to your server. Instead, after the user selects a settlement (using `searchSettlements`), you take its `Ref` and use it as the `SettlementRef` here to search for streets dynamically as they type.\n\n### ⚠️ Important Notes\n\n- **Language Restriction:** The search string (`StreetName`) **must be in Ukrainian**.\n    \n- **Ready-to-Use UI String:** Just like the settlement search, the response includes a `Present` field (e.g., \"вул. Хрещатик\"). This is highly recommended for displaying in your frontend dropdown.\n    \n- **Mandatory Field:** You must provide a valid `SettlementRef` to scope the search to a specific city/village.\n    \n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `StreetName` | String | **Yes** | The name of the street to search for. **Must be in Ukrainian** (e.g., \"Хрещатик\"). |\n| `SettlementRef` | String | **Yes** | Unique UUID of the settlement. Obtained from the `searchSettlements` or `getSettlements` method. |\n| `Limit` | String | No | Number of records to return (e.g., \"50\"). |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"AddressGeneral\",\n   \"calledMethod\": \"searchSettlementStreets\",\n   \"methodProperties\": {\n      \"StreetName\": \"Хрещатик\",\n      \"SettlementRef\": \"e718a680-4b33-11e4-ab6d-005056801329\",\n      \"Limit\": \"50\"\n   }\n}\n\n ```\n\nStartFragment\n\n## 📤 Response Parameters (`data[0].Addresses` array items)\n\nThe search results are nested inside the `Addresses` array within the first object of the `data` array.\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| TotalCount | Number | Total number of found streets |\n| SettlementRef | String | Settlement UUID |\n| SettlementStreetRef | String | Street UUID (used for waybills) |\n| SettlementStreetDescription | String | Street name (UA, without type) |\n| SettlementStreetDescriptionRu | String | Street name (RU) |\n| SettlementStreetDescriptionTranslit | String | Street name (translit) |\n| Present | String | Formatted string (e.g., \"вул. Хрещатик\") |\n| StreetsType | String | Street type UUID |\n| StreetsTypeDescription | String | Street type (UA, e.g., \"вул.\") |\n| StreetsTypeDescriptionRu | String | Street type (RU) |\n| StreetsTypeDescriptionTranslit | String | Street type (translit) |\n| Location | Object | Coordinates object |\n| Location.lat | Number | Latitude |\n| Location.lon | Number | Longitude |\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"TotalCount\": 1,\n            \"Addresses\": [\n                {\n                    \"SettlementRef\": \"e718a680-4b33-11e4-ab6d-005056801329\",\n                    \"SettlementStreetRef\": \"ad090b1f-6845-11e6-8304-00505688561d\",\n                    \"SettlementStreetDescription\": \"Хрещатик\",\n                    \"Present\": \"вул. Хрещатик\",\n                    \"StreetsType\": \"0f1d7fbb-4bba-11e4-ab6d-005056801329\",\n                    \"StreetsTypeDescription\": \"вул.\",\n                    \"Location\": {\n                        \"lat\": 50.44806099962443,\n                        \"lon\": 30.52225599065423\n                    },\n                    \"SettlementStreetDescriptionRu\": \"Крещатик\"\n                }\n            ]\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"AddressGeneral\",\r\n\t\"calledMethod\": \"searchSettlementStreets\",\r\n\t\"methodProperties\": {\r\n\t\t\"StreetName\": \"Хрещатик\",\r\n\t\t\"SettlementRef\": \"e718a680-4b33-11e4-ab6d-005056801329\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": true,\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"TotalCount\": 1,\r\n\t\t\t\"Addresses\": [\r\n\t\t\t\t{\r\n\t\t\t\t\t\"SettlementRef\": \"e718a680-4b33-11e4-ab6d-005056801329\",\r\n\t\t\t\t\t\"SettlementStreetRef\": \"ad090b1f-6845-11e6-8304-00505688561d\",\r\n\t\t\t\t\t\"SettlementStreetDescription\": \"Хрещатик\",\r\n\t\t\t\t\t\"Present\": \"вул. Хрещатик\",\r\n\t\t\t\t\t\"StreetsType\": \"0f1d7fbb-4bba-11e4-ab6d-005056801329\",\r\n\t\t\t\t\t\"StreetsTypeDescription\": \"вул.\",\r\n\t\t\t\t\t\"Location\": {\r\n\t\t\t\t\t\t\"lat\": 50.44806099962443,\r\n\t\t\t\t\t\t\"lon\": 30.52225599065423\r\n\t\t\t\t\t},\r\n\t\t\t\t\t\"SettlementStreetDescriptionRu\": \"Крещатик\"\r\n\t\t\t\t}\r\n\t\t\t]\r\n\t\t}\r\n\t],\r\n\t\"errors\": [],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n\t\"apiKey\": \"{{apiKey}}\",\n\t\"modelName\": \"AddressGeneral\",\n\t\"calledMethod\": \"searchSettlementStreets\",\n\t\"methodProperties\": {\n\t\t\"StreetName\": \"Хрещатик\",\n\t\t\"SettlementRef\": \"00000000-0000-0000-0000-000000000000\"\n\t}\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": false,\r\n\t\"data\": [],\r\n\t\"errors\": [\r\n\t\t\"SettlementRef is invalid\"\r\n\t],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [\r\n\t\t\"20000500626\"\r\n\t],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n\t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\n\t\"modelName\": \"AddressGeneral\",\n\t\"calledMethod\": \"searchSettlementStreets\",\n\t\"methodProperties\": {\n\t\t\"StreetName\": \"Хрещатик\",\n\t\t\"SettlementRef\": \"00000000-0000-0000-0000-000000000000\"\n\t}\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": false,\n    \"data\": [],\n    \"errors\": [\n        \"API key expired\"\n    ],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [\n        \"20000201204\"\n    ],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}"
+                }
+              ]
+            }
+          ],
+          "description": "# 🛣️ AddressGeneral\n\nThere are two primary strategies for integrating the Nova Poshta API regarding reference data (cities, streets, and branches). The API naming convention can be slightly misleading, as the same methods are sometimes used differently depending on your approach.\n\n### 1\\. Real-Time Requests (Dynamic Fetching)\n\nWith this approach, your application queries the Nova Poshta API dynamically as the user interacts with your checkout form. You do not store the massive lists of cities and branches in your own database.\n\n- **How it works:** When a user types a city, you call `searchSettlements`. Once they select a city, you take its `Ref` and instantly call `getWarehouses` (filtered by `CityRef` or `SettlementRef`) to load the branches for that specific city.\n    \n- **Pros:** Data is always 100% up-to-date; no background sync logic required; saves database storage space.\n    \n- **Cons:** Slower UI response times due to network latency; dependence on NP API uptime; potential to hit API rate limits if traffic is high.\n    \n- **Best for:** Small projects, MVPs, or systems with low traffic where instantaneous UI feedback is not the top priority.\n    \n- **Required methods:** `searchSettlements`, `getWarehouses` (with filters), `searchSettlementStreets`.\n    \n\n### 2\\. Local Database Synchronization (Highly Recommended)\n\nYou download the complete reference directories (e.g., all settlements and warehouses across the entire country) and store them in your own database. Your application serves these lists directly to the user from your local server. You must set up a background job (cron job) to update this data periodically (e.g., once a night).\n\n- **How it works:** You run a script that calls `getSettlements` and `getWarehouses`(with [TypeOfWarehouseRef filter](https://developers.novaposhta.ua/view/APIDocumentation/view/model/a0cf0f5f-8512-11ec-8ced-005056b2dbe1/method/a2587b53-8512-11ec-8ced-005056b2dbe1)), using pagination (`Page` and `Limit`) to download the entire database.\n    \n- **Pros:** Instant UI rendering (crucial for \"Pixel Perfect\" frontend experiences); offline availability of reference data; zero dependency on NP API uptime during the checkout flow; no API rate limit issues.\n    \n- **Cons:** Requires additional backend logic to handle daily synchronization; consumes local database storage.\n    \n- **Best for:** High-traffic e-commerce platforms, production applications, and systems where frontend performance and fast checkout are critical.\n    \n- **Required methods:** `getSettlements`, `getWarehouses` (without filters, paginated), `getStreet`, `getWarehouseTypes`.\n    \n\n---\n\nFolder contains following methods:\n\n- getSettlements\n    \n- getStreet\n    \n- getWarehouses\n    \n- getWarehouseTypes\n    \n- searchSettlements\n    \n- searchSettlementStreets"
+        },
+        {
+          "name": "Counterparty",
+          "item": [
+            {
+              "name": "save",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"save\",\n   \"methodProperties\": {\n      \"FirstName\": \"Іван\",\n      \"MiddleName\": \"Іванович\",\n      \"LastName\": \"Іванов\",\n      \"Phone\": \"380997979789\",\n      \"Email\": \"test@i.com\",\n      \"CounterpartyType\": \"PrivatePerson\",\n      \"CounterpartyProperty\": \"Recipient\"\n   }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 👤 Create or Find Counterparty (Recipient)\n\nThis method belongs to the `Counterparty` model (called using \\`CounterpartyGeneral\\` in the payload). It is the **first step in creating a waybill**. You must use this method to create a recipient profile (usually a \"Private Person\") and obtain their unique identifiers (`Ref`).\n\n💡 **Best Practice (The \"Find or Create\" Behavior):**  \nYou do not need to write separate logic to check if a user already exists in the NP system. This endpoint is idempotent. If you send data for a recipient that already exists (matching Phone and Name), the API will **not** throw an error. Instead, it will return the existing user's `Ref` and include a warning (`\"Person already exists!\"`). You should ignore this warning and safely use the returned `Ref` to create the waybill.\n\n### ⚠️ Important Notes\n\n- **Language Restriction:** The recipient's First, Middle, and Last names **must be in Ukrainian**.\n    \n- **Phone Format Flexibility:** The API accepts various phone number formats and formats them automatically. Valid formats include: `+380660000000`, `380660000000`, or local `0660000001`.\n    \n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `FirstName` | String | **Yes** | First name of the recipient in Ukrainian. |\n| `MiddleName` | String | **Yes** | Middle name (Patronymic) of the recipient in Ukrainian. |\n| `LastName` | String | **Yes** | Last name of the recipient in Ukrainian. |\n| `Phone` | String | **Yes** | Phone number format: \"380XXXXXXXXX\". |\n| `Email` | String | No | Recipient's email address. |\n| `CounterpartyType` | String | **Yes** | Type of counterparty. For standard B2C delivery, always use `\"PrivatePerson\"`. |\n| `CounterpartyProperty` | String | **Yes** | Role of the counterparty. Always use `\"Recipient\"`. |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"save\",\n   \"methodProperties\": {\n      \"FirstName\": \"Іван\",\n      \"MiddleName\": \"Іванович\",\n      \"LastName\": \"Іванов\",\n      \"Phone\": \"380997979789\",\n      \"Email\": \"test@i.com\",\n      \"CounterpartyType\": \"PrivatePerson\",\n      \"CounterpartyProperty\": \"Recipient\"\n   }\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n**CRITICAL INTEGRATION NOTE: The Two Refs**\n\nThe response contains two different `Ref` values. You must save **both** to create an Express Waybill (`InternetDocument.save`).\n\n1. The **Counterparty Ref** (The entity).\n    \n2. The **Contact Person Ref** (The actual human picking up the package).\n    \n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Ref | String | Counterparty UUID (use as Recipient in waybill) |\n| Description | String | Usually \"Приватна особа\" |\n| FirstName | String | First name |\n| MiddleName | String | Middle name |\n| LastName | String | Last name |\n| CounterpartyType | String | \"PrivatePerson\" |\n| ContactPerson | Object | Contact person object |\n| ContactPerson.data\\[0\\].Ref | String | Contact person UUID (use as ContactRecipient) |\n| ContactPerson.warnings | Array | May return \\[\"Person already exists!\"\\] |\n\n### Example Response Body\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"Ref\": \"35a9ae39-0000-0000-0000-b88303659df5\",\n            \"Description\": \"Приватна особа\",\n            \"FirstName\": \"Іван\",\n            \"MiddleName\": \"Іванович\",\n            \"LastName\": \"Іванов\",\n            \"Counterparty\": \"\",\n            \"OwnershipForm\": \"\",\n            \"OwnershipFormDescription\": \"\",\n            \"EDRPOU\": \"\",\n            \"CounterpartyType\": \"PrivatePerson\",\n            \"ContactPerson\": {\n                \"success\": true,\n                \"data\": [\n                    {\n                        \"Ref\": \"08cb530b-0000-0000-0000-48df37b921da\",\n                        \"Description\": \"Іван Іванов Іванович\",\n                        \"LastName\": \"Іванов\",\n                        \"FirstName\": \"Іван\",\n                        \"MiddleName\": \"Іванович\"\n                    }\n                ],\n                \"errors\": [],\n                \"translatedErrors\": [],\n                \"warnings\": [\n                    \"Person already exists!\"\n                ],\n                \"info\": [],\n                \"messageCodes\": [],\n                \"errorCodes\": [],\n                \"warningCodes\": [],\n                \"infoCodes\": []\n            }\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"save\",\n   \"methodProperties\": {\n      \"FirstName\": \"Іван\",\n      \"MiddleName\": \"Іванович\",\n      \"LastName\": \"Іванов\",\n      \"Phone\": \"380997979789\",\n      \"Email\": \"test@i.com\",\n      \"CounterpartyType\": \"PrivatePerson\",\n      \"CounterpartyProperty\": \"Recipient\"\n   }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": true,\r\n    \"data\": [\r\n        {\r\n            \"Ref\": \"35a9ae39-0000-0000-0000-b88303659df5\",\r\n            \"Description\": \"Приватна особа\",\r\n            \"FirstName\": \"Іван\",\r\n            \"MiddleName\": \"Іванович\",\r\n            \"LastName\": \"Іванов\",\r\n            \"Counterparty\": \"\",\r\n            \"OwnershipForm\": \"\",\r\n            \"OwnershipFormDescription\": \"\",\r\n            \"EDRPOU\": \"\",\r\n            \"CounterpartyType\": \"PrivatePerson\",\r\n            \"ContactPerson\": {\r\n                \"success\": true,\r\n                \"data\": [\r\n                    {\r\n                        \"Ref\": \"08cb530b-0000-0000-0000-48df37b921da\",\r\n                        \"Description\": \"Іван Іванов Іванович\",\r\n                        \"LastName\": \"Іванов\",\r\n                        \"FirstName\": \"Іван\",\r\n                        \"MiddleName\": \"Іванович\"\r\n                    }\r\n                ],\r\n                \"errors\": [],\r\n                \"translatedErrors\": [],\r\n                \"warnings\": [\r\n                    \"Person already exists!\"\r\n                ],\r\n                \"info\": [],\r\n                \"messageCodes\": [],\r\n                \"errorCodes\": [],\r\n                \"warningCodes\": [],\r\n                \"infoCodes\": []\r\n            }\r\n        }\r\n    ],\r\n    \"errors\": [],\r\n    \"warnings\": [],\r\n    \"info\": [],\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n   \"apiKey\": \"{{apiKey}}\",\r\n   \"modelName\": \"CounterpartyGeneral\",\r\n   \"calledMethod\": \"save\",\r\n   \"methodProperties\": {\r\n      \"FirstName\": \"Іван\",\r\n      \"MiddleName\": \"Іванович\",\r\n      \"LastName\": \"Іванов\",\r\n      \"Phone\": \"000\",\r\n      \"Email\": \"test@i.com\",\r\n      \"CounterpartyType\": \"PrivatePerson\",\r\n      \"CounterpartyProperty\": \"Recipient\"\r\n   }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n\t\"success\": false,\r\n\t\"data\": [],\r\n\t\"errors\": [\r\n\t\t\"Phone invalid format\"\r\n\t],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [\r\n\t\t\"20000100552\"\r\n\t],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n   \"apiKey\": \"00000000-0000-0000-0000-000000000000\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"save\",\n   \"methodProperties\": {\n      \"FirstName\": \"Іван\",\n      \"MiddleName\": \"Іванович\",\n      \"LastName\": \"Іванов\",\n      \"Phone\": \"000\",\n      \"Email\": \"test@i.com\",\n      \"CounterpartyType\": \"PrivatePerson\",\n      \"CounterpartyProperty\": \"Recipient\"\n   }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": false,\n    \"data\": [],\n    \"errors\": [\n        \"API key expired\"\n    ],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [\n        \"20000201204\"\n    ],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "getCounterparties",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiKey\": \"{{apiKey}}\",\n  \"modelName\": \"CounterpartyGeneral\",\n  \"calledMethod\": \"save\",\n  \"methodProperties\": {\n    \"CounterpartyProperty\": \"Sender\",\n    \"Page\": \"1\"\n  }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 🏢 Get Counterparties (Senders, Recipients, Third Parties)\n\nThis method belongs to the `Counterparty` model (called using `CounterpartyGeneral` in the payload). It retrieves a list of counterparties associated with your API key. You can use it to fetch your senders, saved recipients, or third-party payers.\n\n💡 **Best Practice for Setup (Getting your Sender Ref):**  \nThis is the **very first method** you should run when setting up your integration.\n\n1. Run this request with `\"CounterpartyProperty\": \"Sender\"`.\n    \n2. Find your business profile in the response and copy its `Ref`.\n    \n3. Save this UUID in your Postman Environment as `{{senderRef}}`.\n    \n4. Send request to the`getCounterpartyContactPersons` method to find your specific human contact UUID (`{{contactSenderRef}}`).\n    \n\n_Note: The official API documentation recommends updating this directory daily. However, if you are a standard e-commerce store shipping from a single business profile, you only need to run this method ONCE to get your IDs and save it in your environment variables. You do not need to build a daily sync script for this._\n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `CounterpartyProperty` | String | **Yes** | The role of the counterparty. Use `\"Sender\"`, `\"Recipient\"`, or `\"ThirdPerson\"`. |\n| `Page` | String | No | Page number for pagination (e.g., \"1\"). Required if results exceed 100. |\n| `FindByString` | String | No | Search by exact string. You can input the counterparty's name (e.g., \"Талісман\") or EDRPOU code. |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"getCounterparties\",\n   \"methodProperties\": {\n      \"CounterpartyProperty\": \"Sender\",\n      \"Page\": \"1\"\n   }\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Ref | String | Counterparty UUID (store as `{{senderRef}}`) |\n| Description | String | Full name or business name (UA) |\n| FirstName | String | First name |\n| MiddleName | String | Middle name (patronymic) |\n| LastName | String | Last name |\n| CounterpartyType | String | Entity type (e.g., \"PrivatePerson\", \"Organization\") |\n| OwnershipFormRef | String | Ownership form UUID |\n| OwnershipFormDescription | String | Ownership form (e.g., \"ТОВ\", \"ФОП\") |\n| EDRPOU | String | Company registration code |\n| City | String | City UUID |\n| info.totalCount | Number | Total number of counterparties |\n\n### Example Response Body\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"Description\": \"Приватна особа\",\n            \"Ref\": \"00000000-0000-0000-0000-000000000000\",\n            \"City\": \"00000000-0000-0000-0000-000000000000\",\n            \"Counterparty\": \"00000000-0000-0000-0000-000000000000\",\n            \"FirstName\": \"Приватна особа\",\n            \"LastName\": \"\",\n            \"MiddleName\": \"\",\n            \"CounterpartyFullName\": \"\",\n            \"OwnershipFormRef\": \"\",\n            \"OwnershipFormDescription\": \"\",\n            \"EDRPOU\": \"\",\n            \"CounterpartyType\": \"PrivatePerson\",\n            \"TrustedCounterpartyType\": \"\",\n            \"CityDescription\": \"\"\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": {\n        \"totalCount\": 1\n    },\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n\t\"apiKey\": \"{{apiKey}}\",\n\t\"modelName\": \"CounterpartyGeneral\",\n\t\"calledMethod\": \"getCounterparties\",\n\t\"methodProperties\": {\n\t\t\"CounterpartyProperty\": \"Sender\"\n\t}\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": true,\r\n    \"data\": [\r\n        {\r\n            \"Description\": \"Приватна особа\",\r\n            \"Ref\": \"00000000-0000-0000-0000-000000000000\",\r\n            \"City\": \"00000000-0000-0000-0000-000000000000\",\r\n            \"Counterparty\": \"00000000-0000-0000-0000-000000000000\",\r\n            \"FirstName\": \"Приватна особа\",\r\n            \"LastName\": \"\",\r\n            \"MiddleName\": \"\",\r\n            \"CounterpartyFullName\": \"\",\r\n            \"OwnershipFormRef\": \"\",\r\n            \"OwnershipFormDescription\": \"\",\r\n            \"EDRPOU\": \"\",\r\n            \"CounterpartyType\": \"PrivatePerson\",\r\n            \"TrustedCounterpartyType\": \"\",\r\n            \"CityDescription\": \"\"\r\n        }\r\n    ],\r\n    \"errors\": [],\r\n    \"warnings\": [],\r\n    \"info\": {\r\n        \"totalCount\": 1\r\n    },\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"CounterpartyGeneral\",\r\n\t\"calledMethod\": \"getCounterparties\",\r\n\t\"methodProperties\": {\r\n\t\t\"CounterpartyProperty\": \"None\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n\t\"success\": false,\r\n\t\"data\": [],\r\n\t\"errors\": [\r\n\t\t\"CounterpartyProperty is invalid\"\r\n\t],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [\r\n\t\t\"20000900772\"\r\n\t],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n\t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\n\t\"modelName\": \"CounterpartyGeneral\",\n\t\"calledMethod\": \"getCounterparties\",\n\t\"methodProperties\": {\n\t\t\"CounterpartyProperty\": \"Sender\"\n\t}\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": false,\n    \"data\": [],\n    \"errors\": [\n        \"API key expired\"\n    ],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [\n        \"20000201204\"\n    ],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "getCounterpartyContactPersons",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"getCounterpartyContactPersons\",\n   \"methodProperties\": {\n      \"Ref\": \"{{senderRef}}\",\n      \"Page\": \"1\"\n   }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 👥 Get Counterparty Contact Persons\n\nThis method belongs to the `Counterparty` model (called using `CounterpartyGeneral` in the payload). It retrieves the list of contact persons associated with a specific counterparty (business or individual).\n\n💡 **Best Practice for Setup (Single Sender Context):**  \nWhile the official documentation suggests updating this directory daily, for most e-commerce setups with a single sender, you only need to run this method **once during your initial API setup**.  \nYou use this method to find your own contact profile (the human sender) by passing your business's `SenderRef` which you recieve from getCounterparty method. You then copy the returned `Ref` from the response and hardcode it as `{{contactSenderRef}}` in your Postman Environment variables. This UUID is mandatory for the `ContactSender` field when creating an Express Waybill.\n\n### ⚠️ Important Notes\n\n- **Pagination:** If a counterparty has more than 100 contact persons, you must use the `Page` parameter to fetch subsequent records.\n    \n- **Error Handling:** If you pass an invalid or non-existent counterparty `Ref`, the API will return `\"success\": false` with a `\"Counterparty not found\"` error.\n    \n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `Ref` | String | **Yes** | The UUID of the Counterparty entity (obtained from `getCounterparties` or `save`). |\n| `Page` | String | No | Page number for pagination (e.g., \"1\"). Required if results exceed 100. |\n\n### Example Request Body\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"getCounterpartyContactPersons\",\n   \"methodProperties\": {\n      \"Ref\": \"00000000-0000-0000-0000-000000000000\",\n      \"Page\": \"1\"\n   }\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Ref | String | Contact person UUID (store as `{{contactSenderRef}}`) |\n| Description | String | Full name (UA) |\n| LastName | String | Last name |\n| FirstName | String | First name |\n| MiddleName | String | Middle name (patronymic) |\n| Phones | String | Phone number |\n| Email | String | Email address |\n\n### Example Response Body (Success)\n\n_(Note: If the_ `Ref` _in the request is invalid, the API returns a \"Counterparty not found\" error. Below is a successful response so you can identify the structure)._\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"Ref\": \"08cb530b-0000-0000-0000-48df37b921da\",\n            \"Description\": \"Іванов Іван Іванович\",\n            \"Phones\": \"380991234567\",\n            \"Email\": \"sender@business.com\",\n            \"LastName\": \"Іванов\",\n            \"FirstName\": \"Іван\",\n            \"MiddleName\": \"Іванович\"\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [],\n    \"info\": {\n        \"totalCount\": 1\n    },\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"getCounterpartyContactPersons\",\n   \"methodProperties\": {\n      \"Ref\": \"{{senderRef}}\",\n      \"Page\": \"1\"\n   }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": true,\r\n    \"data\": [\r\n        {\r\n            \"Ref\": \"08cb0000-0000-0000-0000-000037b921da\",\r\n            \"Description\": \"Іванов Іван Іванович\",\r\n            \"Phones\": \"380991234567\",\r\n            \"Email\": \"sender@business.com\",\r\n            \"LastName\": \"Іванов\",\r\n            \"FirstName\": \"Іван\",\r\n            \"MiddleName\": \"Іванович\"\r\n        }\r\n    ],\r\n    \"errors\": [],\r\n    \"warnings\": [],\r\n    \"info\": {\r\n        \"totalCount\": 1\r\n    },\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n   \"apiKey\": \"{{apiKey}}\",\r\n   \"modelName\": \"CounterpartyGeneral\",\r\n   \"calledMethod\": \"getCounterpartyContactPersons\",\r\n   \"methodProperties\": {\r\n      \"Ref\": \"00000000-0000-0000-0000-00000000\",\r\n      \"Page\": \"1\"\r\n   }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n\t\"success\": false,\r\n\t\"data\": [],\r\n\t\"errors\": [\r\n\t\t\"Counterparty not found\"\r\n\t],\r\n\t\"warnings\": [],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [\r\n\t\t\"20000400454\"\r\n\t],\r\n\t\"warningCodes\": [],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n   \"apiKey\": \"00000000-0000-0000-0000-000000000000\",\n   \"modelName\": \"CounterpartyGeneral\",\n   \"calledMethod\": \"getCounterpartyContactPersons\",\n   \"methodProperties\": {\n      \"Ref\": \"{{senderRef}}\",\n      \"Page\": \"1\"\n   }\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"success\": false,\n    \"data\": [],\n    \"errors\": [\n        \"API key expired\"\n    ],\n    \"warnings\": [],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [\n        \"20000201204\"\n    ],\n    \"warningCodes\": [],\n    \"infoCodes\": []\n}"
+                }
+              ]
+            }
+          ],
+          "description": "# 👤 Counterparty Module (Contragents & Contact Persons)\n\nThe **Counterparty** module is the foundational core for managing senders and recipients within the Nova Poshta ecosystem. Before you can generate an Express Waybill (ЕН), you must create or identify the counterparties involved in the delivery process.\n\nNova Poshta divides participant data into two distinct layers. Understanding this architectural split is critical for a smooth integration.\n\n---\n\n## 🏗️ Architectural Concept: Counterparty vs. Contact Person\n\nEvery participant in the shipping process is represented by two linked entities:\n\n1. **Counterparty (Контрагент):**  \n    This represents the \"legal or physical entity\" tied to a contract or profile. For standard B2C e-commerce, this is typically a `PrivatePerson`.\n    \n    - _Waybill Parameter:_ Passed as `Sender` or `Recipient`.\n        \n2. **Contact Person (Контактна особа):**  \n    This represents the \"actual human being\" who drops off or picks up the package (requiring a phone number and a name that matches their ID). A single Counterparty can have multiple Contact Persons (e.g., a company counterparty with multiple employees).\n    \n    - _Waybill Parameter:_ Passed as `ContactSender` or `ContactRecipient`.\n        \n\n> ⚠️ **Crucial Note for B2C Integration:**  \nEven if you are shipping to a regular individual customer where the entity and the human are the same person, **the API still requires you to generate and pass both unique Refs** to create a shipment document. \n  \n\n---\n\n## 🔄 Core Synchronization Rules & Idempotency\n\n- **Find or Create Behavior:** The creation methods in this module are idempotent. If a customer with the same phone number and name already exists in the Nova Poshta system, the API will not reject the request. Instead, it will automatically fetch and return the existing profile records along with a warning (`\"Person already exists!\"`). This allows you to safely use a \"find-or-create\" loop in your checkout flow.\n    \n- **Data Language:** All names (First, Middle, Last) and company details must be submitted **strictly in Ukrainian**.\n    \n- **Dynamic Reference Data:** Unlike administrative directories (such as Cities or Warehouses), Counterparty data is highly dynamic. You should generate or query these profiles in real-time during user interaction or order processing.\n    \n\n---\n\n## 🛠️ Main Methods inside this Folder\n\n- **`save`** **(CounterpartyGeneral / Counterparty):** Creates or retrieves a counterparty profile and its nested contact person. This is your primary entry point for setting up delivery recipients.\n    \n- **`getCounterparties:`**Fetches a list of counterparties linked to your API key account (e.g., your own sender profiles).\n    \n- **`getCounterpartyContactPersons:`**Retrieves all contact persons associated with a specific counterparty UUID. Useful when managing business clients or repeat senders."
+        },
+        {
+          "name": "InternetDocument",
+          "item": [
+            {
+              "name": "save",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"InternetDocumentGeneral\",\r\n\t\"calledMethod\": \"save\",\r\n\t\"methodProperties\": {\r\n\t\t\"PayerType\": \"Sender\",\r\n\t\t\"PaymentMethod\": \"Cash\",\r\n\t\t\"CargoType\": \"Cargo\",\r\n\t\t\"Weight\": \"0.5\",\r\n\t\t\"ServiceType\": \"DoorsWarehouse\",\r\n\t\t\"SeatsAmount\": \"2\",\r\n\t\t\"Description\": \"Додатковий опис відправлення\",\r\n\t\t\"Cost\": \"15000\",\r\n\t\t\"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n\t\t\"Sender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"ContactSender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"SendersPhone\": \"380660000000\",\r\n\t\t\"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r\n\t\t\"Recipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"RecipientAddress\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"RecipientsPhone\": \"380660000000\"\r\n\t}\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 📦 Create Express Waybill (InternetDocument.save)\n\nThis method belongs to the `InternetDocument` model. It is the final and most important step of the integration: generating the actual Express Waybill (ЕН / Інтернет-документ).\n\n💡 **Integration Strategy for Edge Cases:**  \nThis single endpoint handles multiple delivery scenarios. Depending on whether you are shipping to a branch, shipping to a door using raw text strings, or requesting Cash on Delivery (Післяплата), your JSON payload will change slightly. See the multiple examples at the bottom of this documentation.\n\n---\n\n## 🛡️ Pre-Flight Check (Crucial Validations)\n\nTo prevent API errors, validate the shipment data against the destination warehouse's capabilities (using data from `getWarehouses`):\n\n1. **Weight Limits:** Verify shipment weight against `TotalMaxWeightAllowed` and `PlaceMaxWeightAllowed`. _(Volumetric weight:_ `Width(cm) * Length(cm) * Height(cm) / 4000`).\n    \n2. **Declared Cost Limit:** Verify `Cost` does not exceed `MaxDeclaredCost`.\n    \n3. **Payment Availability:** If the recipient pays at the branch, ensure it accepts payments: `warehouse.PaymentAccess == \"1\" || warehouse.POSTerminal == \"1\"`.\n    \n\n### 💳 Clarification on Payment Methods (`PaymentMethod`)\n\n- **`\"Cash\"`** **(Payment on Delivery):** This means the service is paid when the package is picked up. _Important:_ This does NOT strictly mean physical paper money. The customer can pay by credit card at the branch's POS terminal. It simply signifies \"Postpaid at the counter\".\n    \n- **`\"NonCash\"`** **(Remote / Contract Billing):** This means the delivery is paid remotely via a Nova Poshta corporate contract account (often by the Sender).\n    \n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n_(Note: Not all parameters are required at the same time. Required fields depend on the_ `ServiceType` _and extra services like Backward Delivery)._\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `PayerType` | String | **Yes** | Who pays for the delivery: `\"Sender\"`, `\"Recipient\"`, or `\"ThirdPerson\"`. |\n| `PaymentMethod` | String | **Yes** | `\"Cash\"` (Paid on pickup - card/cash) or `\"NonCash\"` (Paid by corporate contract). |\n| `DateTime` | String | **Yes** | Planned shipping date in `DD.MM.YYYY` format. Max 3 months in the future. |\n| `CargoType` | String | **Yes** | e.g., `\"Cargo\"`, `\"Parcel\"`, `\"Documents\"` (For documents, Weight must be 0.1, 0.5, or 1.0). |\n| `VolumeGeneral` | String | **Yes** | Total volume of the shipment in cubic meters (m³). |\n| `Weight` | String | **Yes** | Actual weight in kg. |\n| `ServiceType` | String | **Yes** | e.g., `\"WarehouseWarehouse\"`, `\"WarehouseDoors\"`, `\"DoorsWarehouse\"`. |\n| `SeatsAmount` | String | **Yes** | Number of boxes/places. |\n| `Description` | String | **Yes** | Text description of the goods (e.g., \"Одяг\"). |\n| `Cost` | String | **Yes** | Declared assessed value of the goods in UAH. |\n| `CitySender` | String | **Yes** | Sender's City UUID. |\n| `Sender` | String | **Yes** | Sender's business UUID. |\n| `SenderAddress` | String | **Yes** | UUID of the Sender's drop-off Warehouse. |\n| `ContactSender` | String | **Yes** | Sender's human contact UUID. |\n| `SendersPhone` | String | **Yes** | Sender's phone number. |\n| `CityRecipient` | String | Conditional | Recipient's City UUID (Required for Warehouse delivery). |\n| `Recipient` | String | Conditional | Recipient's business/person UUID (Required for Warehouse delivery). |\n| `RecipientAddress` | String | Conditional | UUID of the Destination Warehouse (Required for Warehouse delivery). |\n| `ContactRecipient` | String | Conditional | Recipient's human contact UUID (Required for Warehouse delivery). |\n| `RecipientsPhone` | String | **Yes** | Recipient's phone number. |\n| `BackwardDeliveryData` | Array | No | Used for Cash on Delivery (Зворотня доставка грошей). See Example 3. |\n\n### 🏠 Extra Parameters for \"WarehouseDoors\" using Text Strings\n\nIf you are delivering to a specific address but don't want to sync massive street directories, you can pass the address as text strings.\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `NewAddress` | String | Conditional | Must be `\"1\"` when using string-based door delivery. |\n| `RecipientCityName` | String | Conditional | Name of the recipient's city (Text). |\n| `RecipientArea` | String | Conditional | Name of the Area / Область (Text). |\n| `RecipientAreaRegions` | String | Conditional | Name of the District / Район (Text). |\n| `RecipientAddressName` | String | Conditional | Name of the street (Text). |\n| `RecipientHouse` | String | Conditional | House number. |\n| `RecipientFlat` | String | Conditional | Apartment number. |\n| `RecipientName` | String | Conditional | Full Name of the recipient (Text). |\n| `RecipientType` | String | Conditional | `\"PrivatePerson\"` or `\"Organization\"`. |\n\n---\n\n## 📤 Response Parameters (`data` array items)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `Ref` | String | Unique UUID of the created Express Waybill. Store this in your database. |\n| `IntDocNumber` | String | The actual 14-digit tracking number (e.g., \"20450000000000\"). |\n| `CostOnSite` | Number | The calculated delivery cost. |\n| `EstimatedDeliveryDate` | String | The estimated date of arrival (`DD.MM.YYYY`). |\n\n---\n\n## 📋 JSON Payload Examples\n\n### Example 1: Standard Warehouse-to-Warehouse Delivery\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"InternetDocumentGeneral\",\n   \"calledMethod\": \"save\",\n   \"methodProperties\": {\n      \"PayerType\": \"Sender\",\n      \"PaymentMethod\": \"Cash\",\n      \"DateTime\": \"30.06.2026\",\n      \"CargoType\": \"Parcel\",\n      \"VolumeGeneral\": \"0.1\",\n      \"Weight\": \"2\",\n      \"ServiceType\": \"WarehouseWarehouse\",\n      \"SeatsAmount\": \"1\",\n      \"Description\": \"Взуття\",\n      \"Cost\": \"1500\",\n      \"CitySender\": \"00000000-0000-0000-0000-000000000000\",\n      \"Sender\": \"{{senderRef}}\",\n      \"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\n      \"ContactSender\": \"{{contactSenderRef}}\",\n      \"SendersPhone\": \"380660000000\",\n      \"CityRecipient\": \"00000000-0000-0000-0000-000000000000\",\n      \"Recipient\": \"00000000-0000-0000-0000-000000000000\",\n      \"RecipientAddress\": \"00000000-0000-0000-0000-000000000000\",\n      \"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\n      \"RecipientsPhone\": \"380990000000\"\n   }\n}\n\n ```\n\n### Example 2: Cash On Delivery / Післяплата (Warehouse-to-Warehouse)\n\n_Includes_ `BackwardDeliveryData` _to return money to the Sender._\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"InternetDocumentGeneral\",\n   \"calledMethod\": \"save\",\n   \"methodProperties\": {\n      \"PayerType\": \"Recipient\",\n      \"PaymentMethod\": \"Cash\",\n      \"DateTime\": \"30.06.2026\",\n      \"CargoType\": \"Parcel\",\n      \"VolumeGeneral\": \"0.1\",\n      \"Weight\": \"2\",\n      \"ServiceType\": \"WarehouseWarehouse\",\n      \"SeatsAmount\": \"1\",\n      \"Description\": \"Телефон\",\n      \"Cost\": \"15000\",\n      \"CitySender\": \"00000000-0000-0000-0000-000000000000\",\n      \"Sender\": \"{{senderRef}}\",\n      \"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\n      \"ContactSender\": \"{{contactSenderRef}}\",\n      \"SendersPhone\": \"380660000000\",\n      \"CityRecipient\": \"00000000-0000-0000-0000-000000000000\",\n      \"Recipient\": \"00000000-0000-0000-0000-000000000000\",\n      \"RecipientAddress\": \"00000000-0000-0000-0000-000000000000\",\n      \"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\n      \"RecipientsPhone\": \"380990000000\",\n      \"BackwardDeliveryData\": [\n         {\n            \"PayerType\": \"Recipient\",\n            \"CargoType\": \"Money\",\n            \"RedeliveryString\": \"15000\"\n         }\n      ]\n   }\n}\n\n ```\n\n### Example 3: Door Delivery using Text Strings (No Recipient Ref Needed)\n\n_Bypasses the need for Recipient UUIDs by passing raw address strings._\n\n``` json\n{\n   \"apiKey\": \"{{apiKey}}\",\n   \"modelName\": \"InternetDocumentGeneral\",\n   \"calledMethod\": \"save\",\n   \"methodProperties\": {\n      \"PayerType\": \"Sender\",\n      \"PaymentMethod\": \"Cash\",\n      \"DateTime\": \"30.06.2026\",\n      \"CargoType\": \"Parcel\",\n      \"VolumeGeneral\": \"0.1\",\n      \"Weight\": \"2\",\n      \"ServiceType\": \"WarehouseDoors\",\n      \"SeatsAmount\": \"1\",\n      \"Description\": \"Книги\",\n      \"Cost\": \"500\",\n      \"CitySender\": \"{{citySenderRef}}\",\n      \"Sender\": \"{{senderRef}}\",\n      \"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\n      \"ContactSender\": \"{{contactSenderRef}}\",\n      \"SendersPhone\": \"380660000000\",\n      \"RecipientsPhone\": \"380990000000\",\n      \"NewAddress\": \"1\",\n      \"RecipientCityName\": \"Київ\",\n      \"RecipientArea\": \"Київська\",\n      \"RecipientAreaRegions\": \"\",\n      \"RecipientAddressName\": \"Хрещатик\",\n      \"RecipientHouse\": \"22\",\n      \"RecipientFlat\": \"14\",\n      \"RecipientName\": \"Коваленко Петро Петрович\",\n      \"RecipientType\": \"PrivatePerson\"\n   }\n}\n\n ```\n\nAfter the successful response you can find waybill info in your personal account\n\n<img src=\"https://content.pstmn.io/deee4afe-1155-4c67-a094-b65e9331ad1a/0JfQvdGW0LzQvtC6INC10LrRgNCw0L3QsCAyMDI2LTA2LTMwIDEzNDk0MC5wbmc=\" width=\"948\" height=\"395\">"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"apiKey\": \"{{apiKey}}\",\r\n    \"modelName\": \"InternetDocumentGeneral\",\r\n    \"calledMethod\": \"save\",\r\n    \"methodProperties\": {\r\n        \"PayerType\": \"Sender\",\r\n        \"PaymentMethod\": \"Cash\",\r\n        \"CargoType\": \"Cargo\",\r\n        \"Weight\": \"0.5\",\r\n        \"ServiceType\": \"DoorsWarehouse\",\r\n        \"SeatsAmount\": \"2\",\r\n        \"Description\": \"Додатковий опис відправлення\",\r\n        \"Cost\": \"15000\",\r\n        \"Sender\": \"{{senderRef}}\",\r\n        \"ContactSender\": \"{{contactSenderRef}}\",\r\n        \"SendersPhone\": \"380670000000\",\r\n        \"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n        \"SenderAddress\": \"1ec09d88-e1c2-11e3-8c4a-0050568002cf\",\r\n        \"Recipient\": \"00000000-0000-0000-0000-000000000000\",\r\n        \"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\r\n        \"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r\n        \"RecipientsPhone\": \"380670000000\",\r\n        \"RecipientAddress\": \"35555930-9912-11ea-a768-b8830365bd14\"\r\n    }\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": true,\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"Ref\": \"61f6e8a8-k2hu-c1f1-w4j8-48df37b921da\",\r\n\t\t\t\"CostOnSite\": 285,\r\n\t\t\t\"EstimatedDeliveryDate\": \"03.05.2026\",\r\n\t\t\t\"IntDocNumber\": \"20451476533792\",\r\n\t\t\t\"TypeDocument\": \"InternetDocument\"\r\n\t\t}\r\n\t],\r\n\t\"errors\": [],\r\n\t\"warnings\": [\r\n\t\t\"DateTime is set to current\",\r\n\t\t\"CargoType is changed to Parcel\"\r\n\t],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [],\r\n\t\"warningCodes\": [\r\n\t\t\"30000200880\",\r\n\t\t\"30000201469\"\r\n\t],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"InternetDocumentGeneral\",\r\n\t\"calledMethod\": \"save\",\r\n\t\"methodProperties\": {\r\n\t\t\"PayerType\": \"Sender\",\r\n\t\t\"PaymentMethod\": \"Cash\",\r\n\t\t\"CargoType\": \"Cargo\",\r\n\t\t\"Weight\": \"0.5\",\r\n\t\t\"ServiceType\": \"DoorsWarehouse\",\r\n\t\t\"SeatsAmount\": \"2\",\r\n\t\t\"Description\": \"Додатковий опис відправлення\",\r\n\t\t\"Cost\": \"15000\",\r\n\t\t\"CitySender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"Sender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"ContactSender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"SendersPhone\": \"380660000000\",\r\n\t\t\"CityRecipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"Recipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"RecipientAddress\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"RecipientsPhone\": \"380660000000\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": false,\r\n\t\"data\": [],\r\n\t\"errors\": [\r\n\t\t\"CitySender not found\",\r\n\t\t\"CityRecipient not found\",\r\n\t\t\"Recipient does not exists\",\r\n\t\t\"ContactSender does not exists\"\r\n\t],\r\n\t\"warnings\": [\r\n\t\t\"DateTime is set to current\",\r\n\t\t\"CargoType is changed to Parcel\",\r\n\t\t\"Can not create address for ContactPerson. Do not have relation with real address\",\r\n\t\t\"Can not create address for ContactPerson. Do not have relation with real address\"\r\n\t],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [\r\n\t\t\"20000200106\",\r\n\t\t\"20000200103\",\r\n\t\t\"20000300428\",\r\n\t\t\"20000300403\"\r\n\t],\r\n\t\"warningCodes\": [\r\n\t\t\"30000200880\",\r\n\t\t\"30000201469\"\r\n\t],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"modelName\": \"InternetDocumentGeneral\",\r\n\t\"calledMethod\": \"save\",\r\n\t\"methodProperties\": {\r\n\t\t\"PayerType\": \"Sender\",\r\n\t\t\"PaymentMethod\": \"Cash\",\r\n\t\t\"CargoType\": \"Cargo\",\r\n\t\t\"Weight\": \"0.5\",\r\n\t\t\"ServiceType\": \"DoorsWarehouse\",\r\n\t\t\"SeatsAmount\": \"2\",\r\n\t\t\"Description\": \"Додатковий опис відправлення\",\r\n\t\t\"Cost\": \"15000\",\r\n\t\t\"CitySender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"Sender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"ContactSender\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"SendersPhone\": \"380660000000\",\r\n\t\t\"CityRecipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"Recipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"RecipientAddress\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\t\"RecipientsPhone\": \"380660000000\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": false,\r\n    \"data\": [],\r\n    \"errors\": [\r\n        \"API key expired\"\r\n    ],\r\n    \"warnings\": [],\r\n    \"info\": [],\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [\r\n        \"20000201204\"\r\n    ],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "getDocumentPrice",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"InternetDocumentGeneral\",\r\n\t\"calledMethod\": \"getDocumentPrice\",\r\n\t\"methodProperties\": {\r\n\t\t\"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n\t\t\"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r\n\t\t\"Weight\": \"0.4\",\r\n\t\t\"ServiceType\": \"WarehouseWarehouse\",\r\n\t\t\"Cost\": \"300\",\r\n\t\t\"CargoType\": \"Cargo\",\r\n\t\t\"SeatsAmount\": \"2\"\r\n\t}\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ]
+                },
+                "description": "# 💰 Calculate Delivery Cost (getDocumentPrice)\n\nThis method belongs to the `InternetDocument` model (called using `InternetDocumentGeneral` in the payload). It calculates the estimated delivery cost for a shipment before you actually create the waybill.\n\nIt supports various types of shipments including standard parcels, documents, tires & wheels, and pallets. It can also calculate the cost based on precise volumetric dimensions and additional packaging.\n\n💡 **Best Practice & Critical Naming Quirk:**  \nThere is a major naming overlap in this method:\n\n- The `Cost` parameter you send in the **REQUEST** represents the **Declared Value** of the goods (Assessed Cost).\n    \n- The `Cost` parameter returned in the **RESPONSE** represents the **Price of Delivery** that the client needs to pay.\n    \n\n---\n\n## 📥 Request Parameters (`methodProperties`)\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| `CitySender` | String | **Yes** | UUID of the sender's city (`Ref` from `getCities`). |\n| `CityRecipient` | String | **Yes** | UUID of the recipient's city (`Ref` from `getCities`). |\n| `Weight` | String/Number | **Yes** | Total actual weight of the shipment in kg. |\n| `ServiceType` | String | **Yes** | Type of delivery route (e.g., `\"WarehouseWarehouse\"`, `\"WarehouseDoors\"`, `\"DoorsWarehouse\"`, `\"DoorsDoors\"`). |\n| `Cost` | String/Number | **Yes** | **Declared Value** of the shipment (in UAH). Used to calculate insurance. |\n| `CargoType` | String | **Yes** | Type of cargo (e.g., `\"Parcel\"`, `\"Cargo\"`, `\"Documents\"`, `\"TiresWheels\"`, `\"Pallet\"`). |\n| `SeatsAmount` | String/Number | **Yes** | Number of seats/places (boxes) in the shipment. |\n| `OptionsSeat` | Array | No | Used to specify exact dimensions (Width, Length, Height) and packaging for each seat. |\n| `CargoDetails` | Array | No | Used specifically for `\"TiresWheels\"` to specify the tire type UUID and amount. |\n\n### Example Request Body (Basic Parcel)\n\n``` json\n{\n    \"apiKey\": \"{{apiKey}}\",\n    \"modelName\": \"InternetDocumentGeneral\",\n    \"calledMethod\": \"getDocumentPrice\",\n    \"methodProperties\": {\n        \"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\n        \"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\n        \"Weight\": \"0.4\",\n        \"ServiceType\": \"WarehouseWarehouse\",\n        \"Cost\": \"300\",\n        \"CargoType\": \"Parcel\",\n        \"SeatsAmount\": \"1\"\n    }\n}\n\n ```\n\n### Example Request Body (With Exact Dimensions & Packaging)\n\n``` json\n{\n    \"apiKey\": \"{{apiKey}}\",\n    \"modelName\": \"InternetDocumentGeneral\",\n    \"calledMethod\": \"getDocumentPrice\",\n    \"methodProperties\": {\n        \"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\n        \"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\n        \"ServiceType\": \"WarehouseWarehouse\",\n        \"Cost\": \"1500\",\n        \"CargoType\": \"Cargo\",\n        \"SeatsAmount\": \"1\",\n        \"OptionsSeat\": [\n            {\n                \"weight\": 5, \n                \"volumetricWidth\": 80, \n                \"volumetricLength\": 25, \n                \"volumetricHeight\": 25,\n                \"packRef\": \"1499fa4a-d26e-11e1-95e4-0026b97ed48a\" \n            }\n        ]\n    }\n}\n\n ```\n\n## 📤 Response Parameters (`data` array items)\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| Cost | Number | Calculated delivery cost (UAH) |\n| AssessedCost | Number | Declared shipment value used for calculation (UAH) |\n| warnings | Array | API warnings or automatic adjustments (e.g., \"CargoType is changed to Parcel\") |\n\n### Example Response Body\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"Cost\": 210,\n            \"AssessedCost\": 300\n        }\n    ],\n    \"errors\": [],\n    \"warnings\": [\n        \"DateTime is set to current\",\n        \"CargoType is changed to Parcel\"\n    ],\n    \"info\": [],\n    \"messageCodes\": [],\n    \"errorCodes\": [],\n    \"warningCodes\": [\n        \"30000200880\",\n        \"30000201469\"\n    ],\n    \"infoCodes\": []\n}\n\n ```"
+              },
+              "response": [
+                {
+                  "name": "Successful Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"InternetDocumentGeneral\",\r\n\t\"calledMethod\": \"getDocumentPrice\",\r\n\t\"methodProperties\": {\r\n\t\t\"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n\t\t\"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r\n\t\t\"Weight\": \"0.4\",\r\n\t\t\"ServiceType\": \"WarehouseWarehouse\",\r\n\t\t\"Cost\": \"300\",\r\n\t\t\"CargoType\": \"Cargo\",\r\n\t\t\"SeatsAmount\": \"2\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": true,\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"Cost\": 210,\r\n\t\t\t\"AssessedCost\": 300\r\n\t\t}\r\n\t],\r\n\t\"errors\": [],\r\n\t\"warnings\": [\r\n\t\t\"DateTime is set to current\",\r\n\t\t\"CargoType is changed to Parcel\"\r\n\t],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [],\r\n\t\"warningCodes\": [\r\n\t\t\"30000200880\",\r\n\t\t\"30000201469\"\r\n\t],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"{{apiKey}}\",\r\n\t\"modelName\": \"InternetDocumentGeneral\",\r\n\t\"calledMethod\": \"getDocumentPrice\",\r\n\t\"methodProperties\": {\r\n\t\t\"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n\t\t\"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r\n\t\t\"Weight\": \"0.4\",\r\n\t\t\"ServiceType\": \"WarehouseWarehouse\",\r\n\t\t\"Cost\": \"300\",\r\n\t\t\"CargoType\": \"Cargo\",\r\n\t\t\"SeatsAmount\": \"2\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n\t\"success\": false,\r\n\t\"data\": [],\r\n\t\"errors\": [\r\n\t\t\"CityRecipient incorrect\"\r\n\t],\r\n\t\"warnings\": [\r\n\t\t\"DateTime is set to current\"\r\n\t],\r\n\t\"info\": [],\r\n\t\"messageCodes\": [],\r\n\t\"errorCodes\": [\r\n\t\t\"20000200102\"\r\n\t],\r\n\t\"warningCodes\": [\r\n\t\t\"30000200880\"\r\n\t],\r\n\t\"infoCodes\": []\r\n}"
+                },
+                {
+                  "name": "Unauthorized",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"modelName\": \"InternetDocumentGeneral\",\r\n\t\"calledMethod\": \"getDocumentPrice\",\r\n\t\"methodProperties\": {\r\n\t\t\"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r\n\t\t\"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r\n\t\t\"Weight\": \"0.4\",\r\n\t\t\"ServiceType\": \"WarehouseWarehouse\",\r\n\t\t\"Cost\": \"300\",\r\n\t\t\"CargoType\": \"Cargo\",\r\n\t\t\"SeatsAmount\": \"2\"\r\n\t}\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"success\": false,\r\n    \"data\": [],\r\n    \"errors\": [\r\n        \"API key expired\"\r\n    ],\r\n    \"warnings\": [],\r\n    \"info\": [],\r\n    \"messageCodes\": [],\r\n    \"errorCodes\": [\r\n        \"20000201204\"\r\n    ],\r\n    \"warningCodes\": [],\r\n    \"infoCodes\": []\r\n}"
+                }
+              ]
+            }
+          ],
+          "description": "Folder contains following methods:"
+        }
+      ],
+      "description": "##### Collection contains minimum amount of Customer API methods for NovaPoshta environment to integrate delivery to your service\n\n🚨 **CRITICAL WARNING:** 200 OK on each request  \nThe API always returns HTTP Status 200 OK, even if there is a logical error in your request payload. You must parse the `success` boolean field in the JSON response to verify if the request was actually successful.\n\n##### Folder contains:\n\n- Addresses\n    \n- Counterparty"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          "// Ensure JSON content type is present for all requests in this collection",
+          "pm.request.headers.upsert({ key: 'Content-Type', value: 'application/json' });",
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "apiKey",
+      "value": ""
+    },
+    {
+      "key": "baseUrl",
+      "value": ""
+    },
+    {
+      "key": "senderRef",
+      "value": ""
+    },
+    {
+      "key": "contactSenderRef",
+      "value": ""
+    }
+  ]
+}

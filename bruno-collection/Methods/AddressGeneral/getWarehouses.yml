@@ -1,0 +1,520 @@
+info:
+  name: getWarehouses
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "AddressGeneral",
+        "calledMethod": "getWarehouses",
+        "methodProperties": {
+          "FindByString": "",
+          "CityName": "Київ",
+          "CityRef": "{{cityRef}}",
+          "Page": "1",
+          "Limit": "50",
+          "Language": "UA",
+          "TypeOfWarehouseRef": "{{typeRef}}",
+          "WarehouseId": "151"
+        }
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: cityRef
+      value: 00000000-0000-0000-0000-000000000000
+    - name: typeRef
+      value: 00000000-0000-0000-0000-000000000000
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": {{apiKey}},\r
+
+          \t\"modelName\": \"AddressGeneral\",\r
+
+          \t\"calledMethod\": \"getWarehouses\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"Page\": \"1\",\r
+
+          \t\t\"Limit\": \"1\",\r
+
+          \t\t\"TypeOfWarehouseRef\": \"6f8c7162-4b72-4b0a-88e5-906948c6a92f\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"success": true,
+          	"data": [
+          		{
+          			"SiteKey": "61362",
+          			"Description": "Пункт приймання-видачі (до 30 кг): вул. Квітнева, 15А",
+          			"DescriptionRu": "Пункт приема-выдачи (до 30 кг.):ул. Цветочная, 15А",
+          			"ShortAddress": "Миньківці, Квітнева, 15А",
+          			"ShortAddressRu": "",
+          			"Phone": "380800500609",
+          			"TypeOfWarehouse": "841339c7-591a-42e2-8233-7a0a00f0ed6f",
+          			"Ref": "f220c0ef-fd3c-11ed-9eb1-d4f5ef0df2b8",
+          			"Number": "1",
+          			"CityRef": "a8a20d8b-fba0-11ed-a361-48df37b92096",
+          			"CityDescription": "Миньківці (Київська обл.)",
+          			"CityDescriptionRu": "Миньковцы (Киевская обл.)",
+          			"SettlementRef": "0e965a11-4b3a-11e4-ab6d-005056801329",
+          			"SettlementDescription": "Миньківці",
+          			"SettlementAreaDescription": "Київська",
+          			"SettlementRegionsDescription": "Сквирський",
+          			"SettlementTypeDescription": "село",
+          			"SettlementTypeDescriptionRu": "село",
+          			"Longitude": "29.479210000000000",
+          			"Latitude": "49.796065000000000",
+          			"PostFinance": "0",
+          			"BicycleParking": "0",
+          			"PaymentAccess": "0",
+          			"POSTerminal": "0",
+          			"InternationalShipping": "0",
+          			"SelfServiceWorkplacesCount": "0",
+          			"TotalMaxWeightAllowed": "30",
+          			"PlaceMaxWeightAllowed": "0",
+          			"SendingLimitationsOnDimensions": {
+          				"Width": 120,
+          				"Height": 120,
+          				"Length": 120
+          			},
+          			"ReceivingLimitationsOnDimensions": {
+          				"Width": 120,
+          				"Height": 120,
+          				"Length": 120
+          			},
+          			"Reception": {
+          				"Monday": "09:00-17:00",
+          				"Tuesday": "09:00-17:00",
+          				"Wednesday": "09:00-17:00",
+          				"Thursday": "09:00-17:00",
+          				"Friday": "09:00-17:00",
+          				"Saturday": "09:00-17:00",
+          				"Sunday": "-"
+          			},
+          			"Delivery": {
+          				"Monday": "09:00-14:50",
+          				"Tuesday": "09:00-14:50",
+          				"Wednesday": "09:00-14:50",
+          				"Thursday": "09:00-14:50",
+          				"Friday": "09:00-14:50",
+          				"Saturday": "09:00-14:50",
+          				"Sunday": "-"
+          			},
+          			"Schedule": {
+          				"Monday": "09:00-17:00",
+          				"Tuesday": "09:00-17:00",
+          				"Wednesday": "09:00-17:00",
+          				"Thursday": "09:00-17:00",
+          				"Friday": "09:00-17:00",
+          				"Saturday": "09:00-17:00",
+          				"Sunday": "-"
+          			},
+          			"DistrictCode": "БЦ_СквиМин",
+          			"WarehouseStatus": "Working",
+          			"WarehouseStatusDate": "2023-06-01 00:00:00",
+          			"WarehouseIllusha": "0",
+          			"CategoryOfWarehouse": "Store",
+          			"Direct": "",
+          			"RegionCity": "КИЇВ ЗАХІД ПОСИЛКОВИЙ",
+          			"WarehouseForAgent": "1",
+          			"GeneratorEnabled": "0",
+          			"MaxDeclaredCost": "29000",
+          			"WorkInMobileAwis": "0",
+          			"DenyToSelect": "0",
+          			"CanGetMoneyTransfer": "0",
+          			"HasMirror": "0",
+          			"HasFittingRoom": "0",
+          			"OnlyReceivingParcel": "0",
+          			"PostMachineType": "",
+          			"PostalCodeUA": "09012",
+          			"WarehouseIndex": "12157/1",
+          			"BeaconCode": "",
+          			"Location": ""
+          		}
+          	],
+          	"errors": [],
+          	"warnings": [],
+          	"info": {
+          		"totalCount": 13232
+          	},
+          	"messageCodes": [],
+          	"errorCodes": [],
+          	"warningCodes": [],
+          	"infoCodes": []
+          }
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": {{apiKey}},\r
+
+          \t\"modelName\": \"AddressGeneral\",\r
+
+          \t\"calledMethod\": \"getStreet\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"success": false,
+          	"data": [],
+          	"errors": [
+          		"TypeOfWarehouseRef is incorrect"
+          	],
+          	"warnings": [],
+          	"info": [],
+          	"messageCodes": [],
+          	"errorCodes": [
+          		"20000501333"
+          	],
+          	"warningCodes": [],
+          	"infoCodes": []
+          }
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      body:
+        type: json
+        data: "{\r
+
+          \   \"apiKey\": \"00000000-0000-0000-0000-000000000000\",  \r
+
+          \   \"modelName\": \"AddressGeneral\",\r
+
+          \   \"calledMethod\": \"getWarehouses\",\r
+
+          \   \"methodProperties\": {\r
+
+          \        \"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r
+
+          \   }\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": false,\r
+
+          \    \"data\": [],\r
+
+          \    \"errors\": [\r
+
+          \        \"API key expired\"\r
+
+          \    ],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": [],\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [\r
+
+          \        \"20000201204\"\r
+
+          \    ],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+
+docs: |-
+  # 🏢 Get Warehouses (Branches & Postomats)
+
+  This method belongs to the `Address` model (often called using `AddressGeneral` in the payload). It fetches the directory of Nova Poshta warehouses, including standard branches, cargo departments, and automated parcel lockers (postomats).
+
+  💡 **Integration Strategies:**  
+  How you use this method depends entirely on your chosen integration approach:
+
+  - **Approach 1 (Real-Time Requests):** You can call this endpoint dynamically during user checkout, but you **MUST** filter it by passing a specific `CityRef` or `SettlementRef`. Do not call this method without filters in real-time, as it will attempt to return the entire country's database.
+      
+  - **Approach 2 (Local Synchronization - Recommended):** Do not make real-time requests. Instead, run a scheduled background task (cron job) every night to fetch the entire list (without city filters), update your local database, and serve this data to your users instantly from your own server.
+      
+
+  ### ⚠️ Important API Quirks
+
+  - **HTTP 303 Redirects:** For some large queries without pagination, the API does not return JSON directly. Instead, it returns an **HTTP 303 Redirect** pointing to a cached file. Your HTTP client must be configured to automatically follow redirects.
+      
+
+  _Pro Tip: To bypass redirects and always receive a standard 200 OK JSON response, always use the_ `Page` _and_ `Limit` _parameters in your request._
+
+  - **6,500 Record Limit:** The API returns a maximum of 6,500 records per response. To download the entire directory (for Local Sync), you must use a loop with the `Page` and `Limit` parameters until the `data` array returns empty. It is highly recommended to fetch data separately by `TypeOfWarehouseRef` to keep payloads manageable.
+      
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  You can mix and match these parameters to filter the results.
+
+  | **Parameter** | **Type** | **Required** | **Description** |
+  | --- | --- | --- | --- |
+  | `CityName` | String | No | Filter by city name (in Ukrainian). |
+  | `CityRef` | String | No | Filter by City UUID (obtained from `getCities`). |
+  | `SettlementRef` | String | No | Filter by Settlement UUID (obtained from `getSettlements`). |
+  | `FindByString` | String | No | Search by exact branch name or address. |
+  | `WarehouseId` | String | No | Search by the specific branch number (e.g., "151"). |
+  | `TypeOfWarehouseRef` | String | No | UUID of the warehouse type (e.g., Postomat, Cargo, Parcel). |
+  | `PostFinance` | String | No | `"1"` to return only branches with a NovaPay cash desk. |
+  | `POSTerminal` | String | No | `"1"` to return only branches with POS-terminals. |
+  | `BicycleParking` | String | No | `"1"` to return only branches with bicycle parking. |
+  | `Page` | String | No | Page number for pagination (e.g., "1"). |
+  | `Limit` | String | No | Number of records per page (e.g., "50"). |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "AddressGeneral",
+     "calledMethod": "getWarehouses",
+     "methodProperties": {
+        "CityName": "Київ",
+        "CityRef": "00000000-0000-0000-0000-000000000000",
+        "Page": "1",
+        "Limit": "50",
+        "Language": "UA",
+        "TypeOfWarehouseRef": "00000000-0000-0000-0000-000000000000",
+        "WarehouseId": "151"
+     }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  _Note: The response contains over 30 fields. Below are the most critical ones for integration. More information about fields you can find at link below:_ [getWarehouses docs](https://developers.novaposhta.ua/view/model/a0cf0f5f-8512-11ec-8ced-005056b2dbe1/method/a2322f38-8512-11ec-8ced-005056b2dbe1)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Ref | String | Warehouse UUID |
+  | SiteKey | String | Internal warehouse key |
+  | Description | String | Full name and address (UA) |
+  | DescriptionRu | String | Full name and address (RU) |
+  | DescriptionTranslit | String | Full name and address (translit) |
+  | ShortAddress | String | Short address (UA) |
+  | ShortAddressRu | String | Short address (RU) |
+  | ShortAddressTranslit | String | Short address (translit) |
+  | Phone | String | Contact phone number |
+  | TypeOfWarehouse | String | Warehouse type UUID |
+  | Number | String | Branch number (e.g., "1") |
+  | CityRef | String | City UUID |
+  | CityDescription | String | City name (UA) |
+  | CityDescriptionRu | String | City name (RU) |
+  | CityDescriptionTranslit | String | City name (translit) |
+  | SettlementRef | String | Settlement UUID |
+  | SettlementDescription | String | Settlement name (UA) |
+  | SettlementDescriptionRu | String | Settlement name (RU) |
+  | SettlementDescriptionTranslit | String | Settlement name (translit) |
+  | SettlementAreaDescription | String | Area name (UA) |
+  | SettlementAreaDescriptionRu | String | Area name (RU) |
+  | SettlementAreaDescriptionTranslit | String | Area name (translit) |
+  | SettlementRegionsDescription | String | Region name (UA) |
+  | SettlementRegionsDescriptionRu | String | Region name (RU) |
+  | SettlementRegionsDescriptionTranslit | String | Region name (translit) |
+  | SettlementTypeDescription | String | Settlement type (UA) |
+  | SettlementTypeDescriptionRu | String | Settlement type (RU) |
+  | SettlementTypeDescriptionTranslit | String | Settlement type (translit) |
+  | Longitude | String | Longitude coordinate |
+  | Latitude | String | Latitude coordinate |
+  | PostFinance | String | "1" = has NovaPay cash desk |
+  | BicycleParking | String | "1" = bicycle parking available |
+  | PaymentAccess | String | "1" = payment available |
+  | POSTerminal | String | "1" = POS terminal available |
+  | InternationalShipping | String | "1" = international shipping available |
+  | SelfServiceWorkplacesCount | String | Number of self-service terminals |
+  | TotalMaxWeightAllowed | String | Max total weight (kg), "0" = unlimited |
+  | PlaceMaxWeightAllowed | String | Max weight per parcel (kg) |
+  | SendingLimitationsOnDimensions | Object | Max sending dimensions (W/H/L) |
+  | ReceivingLimitationsOnDimensions | Object | Max receiving dimensions (W/H/L) |
+  | Reception | Object | Reception time windows |
+  | Delivery | Object | Delivery time windows |
+  | Schedule | Object | Working hours by days |
+  | DistrictCode | String | Internal district code |
+  | WarehouseStatus | String | Operational status |
+  | WarehouseStatusDate | String | Status last updated timestamp |
+  | WarehouseIllusha | String | Internal status parameter |
+  | CategoryOfWarehouse | String | Category (e.g., "Branch", "Postomat") |
+  | Direct | String | Internal routing code |
+  | RegionCity | String | Main hub city |
+  | WarehouseForAgent | String | "1" = available for agents |
+  | GeneratorEnabled | String | "1" = has generator |
+  | MaxDeclaredCost | String | Max declared value |
+  | WorkInMobileAwis | String | Mobile AWIS compatibility |
+  | DenyToSelect | String | "1" = not selectable |
+  | CanGetMoneyTransfer | String | "1" = money transfer available |
+  | HasMirror | String | "1" = mirror available |
+  | HasFittingRoom | String | "1" = fitting room available |
+  | OnlyReceivingParcel | String | "1" = only receiving parcels |
+  | PostMachineType | String | Postomat type |
+  | PostalCodeUA | String | Postal code |
+  | WarehouseIndex | String | Internal index |
+  | BeaconCode | String | Beacon identifier |
+  | Location | String | Internal geolocation field |
+  | info.totalCount | Number | Total number of warehouses |
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "SiteKey": "7",
+              "Description": "Відділення №1: вул. Броварська, 2",
+              "DescriptionRu": "Отделение №1: ул. Броварская, 2",
+              "ShortAddress": "Бориспіль, Броварська, 2",
+              "ShortAddressRu": "Борисполь, Броварська, 2",
+              "Phone": "380800500609",
+              "TypeOfWarehouse": "9a68df70-0267-42a8-bb5c-37f427e36ee4",
+              "Ref": "1ec09d2d-e1c2-11e3-8c4a-0050568002cf",
+              "Number": "1",
+              "CityRef": "db5c88d4-391c-11dd-90d9-001a92567626",
+              "CityDescription": "Бориспіль",
+              "CityDescriptionRu": "Борисполь",
+              "SettlementRef": "e714e1ce-4b33-11e4-ab6d-005056801329",
+              "SettlementDescription": "Бориспіль",
+              "SettlementAreaDescription": "Київська",
+              "SettlementRegionsDescription": "",
+              "SettlementTypeDescription": "місто",
+              "SettlementTypeDescriptionRu": "город",
+              "Longitude": "30.921920177300000",
+              "Latitude": "50.367977147000000",
+              "PostFinance": "0",
+              "BicycleParking": "0",
+              "PaymentAccess": "1",
+              "POSTerminal": "1",
+              "InternationalShipping": "1",
+              "SelfServiceWorkplacesCount": "1",
+              "TotalMaxWeightAllowed": "0",
+              "PlaceMaxWeightAllowed": "1100",
+              "SendingLimitationsOnDimensions": {
+                  "Width": 170,
+                  "Height": 200,
+                  "Length": 600
+              },
+              "ReceivingLimitationsOnDimensions": {
+                  "Width": 170,
+                  "Height": 200,
+                  "Length": 600
+              },
+              "Reception": {
+                  "Monday": "08:00-20:00",
+                  "Tuesday": "08:00-20:00",
+                  "Wednesday": "08:00-20:00",
+                  "Thursday": "08:00-20:00",
+                  "Friday": "08:00-20:00",
+                  "Saturday": "09:00-19:00",
+                  "Sunday": "09:00-19:00"
+              },
+              "Delivery": {
+                  "Monday": "08:00-20:00",
+                  "Tuesday": "08:00-20:00",
+                  "Wednesday": "08:00-20:00",
+                  "Thursday": "08:00-20:00",
+                  "Friday": "08:00-20:00",
+                  "Saturday": "09:00-19:00",
+                  "Sunday": "09:00-19:00"
+              },
+              "Schedule": {
+                  "Monday": "08:00-21:00",
+                  "Tuesday": "08:00-21:00",
+                  "Wednesday": "08:00-21:00",
+                  "Thursday": "08:00-21:00",
+                  "Friday": "08:00-21:00",
+                  "Saturday": "09:00-19:00",
+                  "Sunday": "09:00-19:00"
+              },
+              "DistrictCode": "БОР/Сх/В1",
+              "WarehouseStatus": "Working",
+              "WarehouseStatusDate": "2022-03-16 00:00:00",
+              "WarehouseIllusha": "0",
+              "CategoryOfWarehouse": "Branch",
+              "Direct": "",
+              "RegionCity": "КИЇВ СХІД ПОСИЛКОВИЙ",
+              "WarehouseForAgent": "0",
+              "GeneratorEnabled": "1",
+              "MaxDeclaredCost": "0",
+              "WorkInMobileAwis": "0",
+              "DenyToSelect": "0",
+              "CanGetMoneyTransfer": "0",
+              "HasMirror": "0",
+              "HasFittingRoom": "0",
+              "OnlyReceivingParcel": "0",
+              "PostMachineType": "",
+              "PostalCodeUA": "08303",
+              "WarehouseIndex": "13/1",
+              "BeaconCode": "",
+              "Location": ""
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": {
+          "totalCount": 196
+      },
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

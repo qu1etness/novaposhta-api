@@ -1,0 +1,359 @@
+info:
+  name: searchSettlement
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "AddressGeneral",
+        "calledMethod": "searchSettlements",
+        "methodProperties": {
+          "CityName": "Київ",
+          "Limit": "2",
+          "Page": "1"
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"{{apiKey}}\",\r
+
+          \t\"modelName\": \"AddressGeneral\",\r
+
+          \t\"calledMethod\": \"searchSettlements\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CityName\": \"Львів\",\r
+
+          \t\t\"Limit\": \"2\",\r
+
+          \t\t\"Page\": \"1\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": true,\r
+
+          \t\"data\": [\r
+
+          \t\t{\r
+
+          \t\t\t\"TotalCount\": 8,\r
+
+          \t\t\t\"Addresses\": [\r
+
+          \t\t\t\t{\r
+
+          \t\t\t\t\t\"Present\": \"м. Львів, Львівська обл.\",\r
+
+          \t\t\t\t\t\"Warehouses\": 3578,\r
+
+          \t\t\t\t\t\"MainDescription\": \"Львів\",\r
+
+          \t\t\t\t\t\"Area\": \"Львівська\",\r
+
+          \t\t\t\t\t\"Region\": \"\",\r
+
+          \t\t\t\t\t\"SettlementTypeCode\": \"м.\",\r
+
+          \t\t\t\t\t\"Ref\": \"e71abb60-4b33-11e4-ab6d-005056801329\",\r
+
+          \t\t\t\t\t\"DeliveryCity\": \"db5c88f5-391c-11dd-90d9-001a92567626\",\r
+
+          \t\t\t\t\t\"AddressDeliveryAllowed\": true,\r
+
+          \t\t\t\t\t\"StreetsAvailability\": true,\r
+
+          \t\t\t\t\t\"ParentRegionTypes\": \"область\",\r
+
+          \t\t\t\t\t\"ParentRegionCode\": \"обл.\",\r
+
+          \t\t\t\t\t\"RegionTypes\": \"\",\r
+
+          \t\t\t\t\t\"RegionTypesCode\": \"\"\r
+
+          \t\t\t\t},\r
+
+          \t\t\t\t{\r
+
+          \t\t\t\t\t\"Present\": \"м. Миколаїв, Стрийський р-н, Львівська обл.\",\r
+
+          \t\t\t\t\t\"Warehouses\": 8,\r
+
+          \t\t\t\t\t\"MainDescription\": \"Миколаїв\",\r
+
+          \t\t\t\t\t\"Area\": \"Львівська\",\r
+
+          \t\t\t\t\t\"Region\": \"Стрийський\",\r
+
+          \t\t\t\t\t\"SettlementTypeCode\": \"м.\",\r
+
+          \t\t\t\t\t\"Ref\": \"e71b1300-4b33-11e4-ab6d-005056801329\",\r
+
+          \t\t\t\t\t\"DeliveryCity\": \"acecfca8-1488-11df-8caf-000c2965ae0e\",\r
+
+          \t\t\t\t\t\"AddressDeliveryAllowed\": true,\r
+
+          \t\t\t\t\t\"StreetsAvailability\": false,\r
+
+          \t\t\t\t\t\"ParentRegionTypes\": \"область\",\r
+
+          \t\t\t\t\t\"ParentRegionCode\": \"обл.\",\r
+
+          \t\t\t\t\t\"RegionTypes\": \"район\",\r
+
+          \t\t\t\t\t\"RegionTypesCode\": \"р-н\"\r
+
+          \t\t\t\t}\r
+
+          \t\t\t]\r
+
+          \t\t}\r
+
+          \t],\r
+
+          \t\"errors\": [],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |
+          {
+            "apiKey": "{{apiKey}}",
+             "modelName": "AddressGeneral",
+             "calledMethod": "searchSettlementStreets",
+             "methodProperties": {
+                  "StreetName" : "ss",
+                  "Limit" : "2",
+                  "Page": "1"
+             }
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+              "success": false,
+              "data": [],
+              "errors": [
+                  "CityName has invalid characters"
+              ],
+              "warnings": [],
+              "info": [],
+              "messageCodes": [],
+              "errorCodes": [
+                  "20000500652"
+              ],
+              "warningCodes": [],
+              "infoCodes": []
+          }
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |
+          {
+            "apiKey": "{{apiKey}}",
+             "modelName": "AddressGeneral",
+             "calledMethod": "searchSettlement",
+             "methodProperties": {
+                  "StreetName" : "Хрещатик",
+                  "SettlementRef" : "00000000-0000-0000-0000-000000000000",
+                  "Limit" : "50"
+             }
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": false,\r
+
+          \    \"data\": [],\r
+
+          \    \"errors\": [\r
+
+          \        \"API key expired\"\r
+
+          \    ],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": [],\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [\r
+
+          \        \"20000201204\"\r
+
+          \    ],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+
+docs: |-
+  # 🔍 Search Settlements (Online Search)
+
+  This method belongs to the `AddressGeneral`. It allows you to perform a **REAL-TIME online search** for settlements.
+
+  💡 **Best Practice for Integration:**  
+  Use this method if you chose **Integration Approach 1 (Real-Time Search)**. With this method, you do not need to download, store, or update the massive directories of settlements on your server. You simply call this endpoint on the fly when the user types a city name in your checkout form.
+
+  ### ⚠️ Important Notes
+
+  - **Language Restriction:** The search string (`CityName`) **must be in Ukrainian**.
+      
+  - **Ready-to-Use UI String:** The response includes a `Present` field, which contains a pre-formatted string (e.g., "м. Київ, Київська обл."). You can display this directly in your frontend dropdown menu to save time on formatting.
+      
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | **Parameter** | **Type** | **Required** | **Description** |
+  | --- | --- | --- | --- |
+  | `CityName` | String | **Yes** | The name of the settlement to search for. **Must be in Ukrainian** (e.g., "Київ"). |
+  | `Page` | String | No | The page number for pagination (e.g., "1"). |
+  | `Limit` | String | No | Number of records per page (e.g., "50"). |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "AddressGeneral",
+     "calledMethod": "searchSettlements",
+     "methodProperties": {
+        "CityName": "Київ",
+        "Limit": "50",
+        "Page": "1"
+     }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data[0].Addresses` array items)
+
+  The search results are nested inside the `Addresses` array within the first object of the `data` array.
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | TotalCount | Number | Total number of found settlements |
+  | Present | String | Formatted string with type, name, and region (e.g., "м. Львів, Львівська обл.") |
+  | Ref | String | Settlement UUID |
+  | DeliveryCity | String | UUID used for routing in waybills |
+  | MainDescription | String | Settlement name (e.g., "Львів") |
+  | Area | String | Area (область) |
+  | Region | String | District/region (район) |
+  | Warehouses | Number | Number of active NP branches |
+  | AddressDeliveryAllowed | Boolean | `true` = courier delivery available |
+  | StreetsAvailability | Boolean | `true` = streets directory available |
+  | SettlementTypeCode | String | Short settlement type (e.g., "м.", "с.") |
+
+  ### Example Response Body
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "TotalCount": 8,
+              "Addresses": [
+                  {
+                      "Present": "м. Львів, Львівська обл.",
+                      "Warehouses": 3578,
+                      "MainDescription": "Львів",
+                      "Area": "Львівська",
+                      "Region": "",
+                      "SettlementTypeCode": "м.",
+                      "Ref": "e71abb60-4b33-11e4-ab6d-005056801329",
+                      "DeliveryCity": "db5c88f5-391c-11dd-90d9-001a92567626",
+                      "AddressDeliveryAllowed": true,
+                      "StreetsAvailability": true,
+                      "ParentRegionTypes": "область",
+                      "ParentRegionCode": "обл.",
+                      "RegionTypes": "",
+                      "RegionTypesCode": ""
+                  }
+              ]
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": [],
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

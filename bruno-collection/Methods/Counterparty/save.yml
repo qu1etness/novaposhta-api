@@ -1,0 +1,399 @@
+info:
+  name: save
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+         "apiKey": "{{apiKey}}",
+         "modelName": "CounterpartyGeneral",
+         "calledMethod": "save",
+         "methodProperties": {
+            "FirstName": "Іван",
+            "MiddleName": "Іванович",
+            "LastName": "Іванов",
+            "Phone": "380997979789",
+            "Email": "test@i.com",
+            "CounterpartyType": "PrivatePerson",
+            "CounterpartyProperty": "Recipient"
+         }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+             "apiKey": "{{apiKey}}",
+             "modelName": "CounterpartyGeneral",
+             "calledMethod": "save",
+             "methodProperties": {
+                "FirstName": "Іван",
+                "MiddleName": "Іванович",
+                "LastName": "Іванов",
+                "Phone": "380997979789",
+                "Email": "test@i.com",
+                "CounterpartyType": "PrivatePerson",
+                "CounterpartyProperty": "Recipient"
+             }
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": true,\r
+
+          \    \"data\": [\r
+
+          \        {\r
+
+          \            \"Ref\": \"35a9ae39-0000-0000-0000-b88303659df5\",\r
+
+          \            \"Description\": \"Приватна особа\",\r
+
+          \            \"FirstName\": \"Іван\",\r
+
+          \            \"MiddleName\": \"Іванович\",\r
+
+          \            \"LastName\": \"Іванов\",\r
+
+          \            \"Counterparty\": \"\",\r
+
+          \            \"OwnershipForm\": \"\",\r
+
+          \            \"OwnershipFormDescription\": \"\",\r
+
+          \            \"EDRPOU\": \"\",\r
+
+          \            \"CounterpartyType\": \"PrivatePerson\",\r
+
+          \            \"ContactPerson\": {\r
+
+          \                \"success\": true,\r
+
+          \                \"data\": [\r
+
+          \                    {\r
+
+          \                        \"Ref\": \"08cb530b-0000-0000-0000-48df37b921da\",\r
+
+          \                        \"Description\": \"Іван Іванов Іванович\",\r
+
+          \                        \"LastName\": \"Іванов\",\r
+
+          \                        \"FirstName\": \"Іван\",\r
+
+          \                        \"MiddleName\": \"Іванович\"\r
+
+          \                    }\r
+
+          \                ],\r
+
+          \                \"errors\": [],\r
+
+          \                \"translatedErrors\": [],\r
+
+          \                \"warnings\": [\r
+
+          \                    \"Person already exists!\"\r
+
+          \                ],\r
+
+          \                \"info\": [],\r
+
+          \                \"messageCodes\": [],\r
+
+          \                \"errorCodes\": [],\r
+
+          \                \"warningCodes\": [],\r
+
+          \                \"infoCodes\": []\r
+
+          \            }\r
+
+          \        }\r
+
+          \    ],\r
+
+          \    \"errors\": [],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": [],\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \   \"apiKey\": \"{{apiKey}}\",\r
+
+          \   \"modelName\": \"CounterpartyGeneral\",\r
+
+          \   \"calledMethod\": \"save\",\r
+
+          \   \"methodProperties\": {\r
+
+          \      \"FirstName\": \"Іван\",\r
+
+          \      \"MiddleName\": \"Іванович\",\r
+
+          \      \"LastName\": \"Іванов\",\r
+
+          \      \"Phone\": \"000\",\r
+
+          \      \"Email\": \"test@i.com\",\r
+
+          \      \"CounterpartyType\": \"PrivatePerson\",\r
+
+          \      \"CounterpartyProperty\": \"Recipient\"\r
+
+          \   }\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": false,\r
+
+          \t\"data\": [],\r
+
+          \t\"errors\": [\r
+
+          \t\t\"Phone invalid format\"\r
+
+          \t],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [\r
+
+          \t\t\"20000100552\"\r
+
+          \t],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+             "apiKey": "00000000-0000-0000-0000-000000000000",
+             "modelName": "CounterpartyGeneral",
+             "calledMethod": "save",
+             "methodProperties": {
+                "FirstName": "Іван",
+                "MiddleName": "Іванович",
+                "LastName": "Іванов",
+                "Phone": "000",
+                "Email": "test@i.com",
+                "CounterpartyType": "PrivatePerson",
+                "CounterpartyProperty": "Recipient"
+             }
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+              "success": false,
+              "data": [],
+              "errors": [
+                  "API key expired"
+              ],
+              "warnings": [],
+              "info": [],
+              "messageCodes": [],
+              "errorCodes": [
+                  "20000201204"
+              ],
+              "warningCodes": [],
+              "infoCodes": []
+          }
+
+docs: |-
+  # 👤 Create or Find Counterparty (Recipient)
+
+  This method belongs to the `Counterparty` model (called using \`CounterpartyGeneral\` in the payload). It is the **first step in creating a waybill**. You must use this method to create a recipient profile (usually a "Private Person") and obtain their unique identifiers (`Ref`).
+
+  💡 **Best Practice (The "Find or Create" Behavior):**  
+  You do not need to write separate logic to check if a user already exists in the NP system. This endpoint is idempotent. If you send data for a recipient that already exists (matching Phone and Name), the API will **not** throw an error. Instead, it will return the existing user's `Ref` and include a warning (`"Person already exists!"`). You should ignore this warning and safely use the returned `Ref` to create the waybill.
+
+  ### ⚠️ Important Notes
+
+  - **Language Restriction:** The recipient's First, Middle, and Last names **must be in Ukrainian**.
+      
+  - **Phone Format Flexibility:** The API accepts various phone number formats and formats them automatically. Valid formats include: `+380660000000`, `380660000000`, or local `0660000001`.
+      
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `FirstName` | String | **Yes** | First name of the recipient in Ukrainian. |
+  | `MiddleName` | String | **Yes** | Middle name (Patronymic) of the recipient in Ukrainian. |
+  | `LastName` | String | **Yes** | Last name of the recipient in Ukrainian. |
+  | `Phone` | String | **Yes** | Phone number format: "380XXXXXXXXX". |
+  | `Email` | String | No | Recipient's email address. |
+  | `CounterpartyType` | String | **Yes** | Type of counterparty. For standard B2C delivery, always use `"PrivatePerson"`. |
+  | `CounterpartyProperty` | String | **Yes** | Role of the counterparty. Always use `"Recipient"`. |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "CounterpartyGeneral",
+     "calledMethod": "save",
+     "methodProperties": {
+        "FirstName": "Іван",
+        "MiddleName": "Іванович",
+        "LastName": "Іванов",
+        "Phone": "380997979789",
+        "Email": "test@i.com",
+        "CounterpartyType": "PrivatePerson",
+        "CounterpartyProperty": "Recipient"
+     }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  **CRITICAL INTEGRATION NOTE: The Two Refs**
+
+  The response contains two different `Ref` values. You must save **both** to create an Express Waybill (`InternetDocument.save`).
+
+  1. The **Counterparty Ref** (The entity).
+      
+  2. The **Contact Person Ref** (The actual human picking up the package).
+      
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Ref | String | Counterparty UUID (use as Recipient in waybill) |
+  | Description | String | Usually "Приватна особа" |
+  | FirstName | String | First name |
+  | MiddleName | String | Middle name |
+  | LastName | String | Last name |
+  | CounterpartyType | String | "PrivatePerson" |
+  | ContactPerson | Object | Contact person object |
+  | ContactPerson.data\[0\].Ref | String | Contact person UUID (use as ContactRecipient) |
+  | ContactPerson.warnings | Array | May return \["Person already exists!"\] |
+
+  ### Example Response Body
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "Ref": "35a9ae39-0000-0000-0000-b88303659df5",
+              "Description": "Приватна особа",
+              "FirstName": "Іван",
+              "MiddleName": "Іванович",
+              "LastName": "Іванов",
+              "Counterparty": "",
+              "OwnershipForm": "",
+              "OwnershipFormDescription": "",
+              "EDRPOU": "",
+              "CounterpartyType": "PrivatePerson",
+              "ContactPerson": {
+                  "success": true,
+                  "data": [
+                      {
+                          "Ref": "08cb530b-0000-0000-0000-48df37b921da",
+                          "Description": "Іван Іванов Іванович",
+                          "LastName": "Іванов",
+                          "FirstName": "Іван",
+                          "MiddleName": "Іванович"
+                      }
+                  ],
+                  "errors": [],
+                  "translatedErrors": [],
+                  "warnings": [
+                      "Person already exists!"
+                  ],
+                  "info": [],
+                  "messageCodes": [],
+                  "errorCodes": [],
+                  "warningCodes": [],
+                  "infoCodes": []
+              }
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": [],
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

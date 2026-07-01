@@ -1,0 +1,324 @@
+info:
+  name: searchSettlementsStreets
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "AddressGeneral",
+        "calledMethod": "searchSettlementStreets",
+        "methodProperties": {
+          "StreetName": "Хрещатик",
+          "SettlementRef": "{{settlementRef}}",
+          "Limit" : "50"
+        }
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: settlementRef
+      value: e718a680-4b33-11e4-ab6d-005056801329
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"{{apiKey}}\",\r
+
+          \t\"modelName\": \"AddressGeneral\",\r
+
+          \t\"calledMethod\": \"searchSettlementStreets\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"StreetName\": \"Хрещатик\",\r
+
+          \t\t\"SettlementRef\": \"e718a680-4b33-11e4-ab6d-005056801329\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": true,\r
+
+          \t\"data\": [\r
+
+          \t\t{\r
+
+          \t\t\t\"TotalCount\": 1,\r
+
+          \t\t\t\"Addresses\": [\r
+
+          \t\t\t\t{\r
+
+          \t\t\t\t\t\"SettlementRef\": \"e718a680-4b33-11e4-ab6d-005056801329\",\r
+
+          \t\t\t\t\t\"SettlementStreetRef\": \"ad090b1f-6845-11e6-8304-00505688561d\",\r
+
+          \t\t\t\t\t\"SettlementStreetDescription\": \"Хрещатик\",\r
+
+          \t\t\t\t\t\"Present\": \"вул. Хрещатик\",\r
+
+          \t\t\t\t\t\"StreetsType\": \"0f1d7fbb-4bba-11e4-ab6d-005056801329\",\r
+
+          \t\t\t\t\t\"StreetsTypeDescription\": \"вул.\",\r
+
+          \t\t\t\t\t\"Location\": {\r
+
+          \t\t\t\t\t\t\"lat\": 50.44806099962443,\r
+
+          \t\t\t\t\t\t\"lon\": 30.52225599065423\r
+
+          \t\t\t\t\t},\r
+
+          \t\t\t\t\t\"SettlementStreetDescriptionRu\": \"Крещатик\"\r
+
+          \t\t\t\t}\r
+
+          \t\t\t]\r
+
+          \t\t}\r
+
+          \t],\r
+
+          \t\"errors\": [],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"apiKey": "{{apiKey}}",
+          	"modelName": "AddressGeneral",
+          	"calledMethod": "searchSettlementStreets",
+          	"methodProperties": {
+          		"StreetName": "Хрещатик",
+          		"SettlementRef": "00000000-0000-0000-0000-000000000000"
+          	}
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": false,\r
+
+          \t\"data\": [],\r
+
+          \t\"errors\": [\r
+
+          \t\t\"SettlementRef is invalid\"\r
+
+          \t],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [\r
+
+          \t\t\"20000500626\"\r
+
+          \t],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"apiKey": "00000000-0000-0000-0000-000000000000",
+          	"modelName": "AddressGeneral",
+          	"calledMethod": "searchSettlementStreets",
+          	"methodProperties": {
+          		"StreetName": "Хрещатик",
+          		"SettlementRef": "00000000-0000-0000-0000-000000000000"
+          	}
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+              "success": false,
+              "data": [],
+              "errors": [
+                  "API key expired"
+              ],
+              "warnings": [],
+              "info": [],
+              "messageCodes": [],
+              "errorCodes": [
+                  "20000201204"
+              ],
+              "warningCodes": [],
+              "infoCodes": []
+          }
+
+docs: |-
+  # 🛣️ Search Settlement Streets (Online Search)
+
+  This method belongs to the `AddressGeneral.` It allows you to perform a **REAL-TIME online search** for streets within a specific settlement.
+
+  💡 **Integration Strategies:**  
+  Use this method for **Approach 1 (Real-Time Requests)**. When a user selects door-to-door delivery, you do not need to download the massive street directories to your server. Instead, after the user selects a settlement (using `searchSettlements`), you take its `Ref` and use it as the `SettlementRef` here to search for streets dynamically as they type.
+
+  ### ⚠️ Important Notes
+
+  - **Language Restriction:** The search string (`StreetName`) **must be in Ukrainian**.
+      
+  - **Ready-to-Use UI String:** Just like the settlement search, the response includes a `Present` field (e.g., "вул. Хрещатик"). This is highly recommended for displaying in your frontend dropdown.
+      
+  - **Mandatory Field:** You must provide a valid `SettlementRef` to scope the search to a specific city/village.
+      
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `StreetName` | String | **Yes** | The name of the street to search for. **Must be in Ukrainian** (e.g., "Хрещатик"). |
+  | `SettlementRef` | String | **Yes** | Unique UUID of the settlement. Obtained from the `searchSettlements` or `getSettlements` method. |
+  | `Limit` | String | No | Number of records to return (e.g., "50"). |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "AddressGeneral",
+     "calledMethod": "searchSettlementStreets",
+     "methodProperties": {
+        "StreetName": "Хрещатик",
+        "SettlementRef": "e718a680-4b33-11e4-ab6d-005056801329",
+        "Limit": "50"
+     }
+  }
+
+   ```
+
+  StartFragment
+
+  ## 📤 Response Parameters (`data[0].Addresses` array items)
+
+  The search results are nested inside the `Addresses` array within the first object of the `data` array.
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | TotalCount | Number | Total number of found streets |
+  | SettlementRef | String | Settlement UUID |
+  | SettlementStreetRef | String | Street UUID (used for waybills) |
+  | SettlementStreetDescription | String | Street name (UA, without type) |
+  | SettlementStreetDescriptionRu | String | Street name (RU) |
+  | SettlementStreetDescriptionTranslit | String | Street name (translit) |
+  | Present | String | Formatted string (e.g., "вул. Хрещатик") |
+  | StreetsType | String | Street type UUID |
+  | StreetsTypeDescription | String | Street type (UA, e.g., "вул.") |
+  | StreetsTypeDescriptionRu | String | Street type (RU) |
+  | StreetsTypeDescriptionTranslit | String | Street type (translit) |
+  | Location | Object | Coordinates object |
+  | Location.lat | Number | Latitude |
+  | Location.lon | Number | Longitude |
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "TotalCount": 1,
+              "Addresses": [
+                  {
+                      "SettlementRef": "e718a680-4b33-11e4-ab6d-005056801329",
+                      "SettlementStreetRef": "ad090b1f-6845-11e6-8304-00505688561d",
+                      "SettlementStreetDescription": "Хрещатик",
+                      "Present": "вул. Хрещатик",
+                      "StreetsType": "0f1d7fbb-4bba-11e4-ab6d-005056801329",
+                      "StreetsTypeDescription": "вул.",
+                      "Location": {
+                          "lat": 50.44806099962443,
+                          "lon": 30.52225599065423
+                      },
+                      "SettlementStreetDescriptionRu": "Крещатик"
+                  }
+              ]
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": [],
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

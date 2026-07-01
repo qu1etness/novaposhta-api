@@ -1,0 +1,60 @@
+info:
+  name: AddressGeneral
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+
+docs:
+  content: |-
+    # 🛣️ AddressGeneral
+
+    There are two primary strategies for integrating the Nova Poshta API regarding reference data (cities, streets, and branches). The API naming convention can be slightly misleading, as the same methods are sometimes used differently depending on your approach.
+
+    ### 1\. Real-Time Requests (Dynamic Fetching)
+
+    With this approach, your application queries the Nova Poshta API dynamically as the user interacts with your checkout form. You do not store the massive lists of cities and branches in your own database.
+
+    - **How it works:** When a user types a city, you call `searchSettlements`. Once they select a city, you take its `Ref` and instantly call `getWarehouses` (filtered by `CityRef` or `SettlementRef`) to load the branches for that specific city.
+        
+    - **Pros:** Data is always 100% up-to-date; no background sync logic required; saves database storage space.
+        
+    - **Cons:** Slower UI response times due to network latency; dependence on NP API uptime; potential to hit API rate limits if traffic is high.
+        
+    - **Best for:** Small projects, MVPs, or systems with low traffic where instantaneous UI feedback is not the top priority.
+        
+    - **Required methods:** `searchSettlements`, `getWarehouses` (with filters), `searchSettlementStreets`.
+        
+
+    ### 2\. Local Database Synchronization (Highly Recommended)
+
+    You download the complete reference directories (e.g., all settlements and warehouses across the entire country) and store them in your own database. Your application serves these lists directly to the user from your local server. You must set up a background job (cron job) to update this data periodically (e.g., once a night).
+
+    - **How it works:** You run a script that calls `getSettlements` and `getWarehouses`(with [TypeOfWarehouseRef filter](https://developers.novaposhta.ua/view/APIDocumentation/view/model/a0cf0f5f-8512-11ec-8ced-005056b2dbe1/method/a2587b53-8512-11ec-8ced-005056b2dbe1)), using pagination (`Page` and `Limit`) to download the entire database.
+        
+    - **Pros:** Instant UI rendering (crucial for "Pixel Perfect" frontend experiences); offline availability of reference data; zero dependency on NP API uptime during the checkout flow; no API rate limit issues.
+        
+    - **Cons:** Requires additional backend logic to handle daily synchronization; consumes local database storage.
+        
+    - **Best for:** High-traffic e-commerce platforms, production applications, and systems where frontend performance and fast checkout are critical.
+        
+    - **Required methods:** `getSettlements`, `getWarehouses` (without filters, paginated), `getStreet`, `getWarehouseTypes`.
+        
+
+    ---
+
+    Folder contains following methods:
+
+    - getSettlements
+        
+    - getStreet
+        
+    - getWarehouses
+        
+    - getWarehouseTypes
+        
+    - searchSettlements
+        
+    - searchSettlementStreets
+  type: text/markdown

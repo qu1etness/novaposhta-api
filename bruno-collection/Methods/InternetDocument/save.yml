@@ -1,0 +1,604 @@
+info:
+  name: save
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "InternetDocumentGeneral",
+        "calledMethod": "save",
+        "methodProperties": {
+          "PayerType": "Sender",
+          "PaymentMethod": "Cash",
+          "CargoType": "Cargo",
+          "Weight": "0.5",
+          "ServiceType": "DoorsWarehouse",
+          "SeatsAmount": "2",
+          "Description": "Додатковий опис відправлення",
+          "Cost": "15000",
+          "CitySender": "{{citySender}}",
+          "Sender": "{{senderRef}}",
+          "ContactSender": "{{contactSenderRef}}",
+          "SenderAddress": "{{senderAddress}}",
+          "SendersPhone": "380660000000",
+          "CityRecipient": "{{cityRecipient}}",
+          "Recipient": "{{recipientRef}}",
+          "RecipientAddress": "{{recipientAddress}}",
+          "ContactRecipient": "{{contactRecipient}}",
+          "RecipientsPhone": "380660000000",
+          "BackwardDeliveryData": [
+            {
+              "PayerType": "Recipient",
+              "CargoType": "Money",
+              "RedeliveryString": "15000"
+            }
+          ]
+        }
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: citySender
+      value: 00000000-0000-0000-0000-000000000000
+    - name: senderAddress
+      value: 00000000-0000-0000-0000-000000000000
+    - name: cityRecipient
+      value: 00000000-0000-0000-0000-000000000000
+    - name: recipientRef
+      value: ""
+    - name: recipientAddress
+      value: ""
+    - name: contactRecipient
+      value: ""
+    - name: ""
+      value: ""
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"apiKey\": \"{{apiKey}}\",\r
+
+          \    \"modelName\": \"InternetDocumentGeneral\",\r
+
+          \    \"calledMethod\": \"save\",\r
+
+          \    \"methodProperties\": {\r
+
+          \        \"PayerType\": \"Sender\",\r
+
+          \        \"PaymentMethod\": \"Cash\",\r
+
+          \        \"CargoType\": \"Cargo\",\r
+
+          \        \"Weight\": \"0.5\",\r
+
+          \        \"ServiceType\": \"DoorsWarehouse\",\r
+
+          \        \"SeatsAmount\": \"2\",\r
+
+          \        \"Description\": \"Додатковий опис відправлення\",\r
+
+          \        \"Cost\": \"15000\",\r
+
+          \        \"Sender\": \"{{senderRef}}\",\r
+
+          \        \"ContactSender\": \"{{contactSenderRef}}\",\r
+
+          \        \"SendersPhone\": \"380670000000\",\r
+
+          \        \"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r
+
+          \        \"SenderAddress\": \"1ec09d88-e1c2-11e3-8c4a-0050568002cf\",\r
+
+          \        \"Recipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \        \"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \        \"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r
+
+          \        \"RecipientsPhone\": \"380670000000\",\r
+
+          \        \"RecipientAddress\": \"35555930-9912-11ea-a768-b8830365bd14\"\r
+
+          \    }\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": true,\r
+
+          \t\"data\": [\r
+
+          \t\t{\r
+
+          \t\t\t\"Ref\": \"61f6e8a8-k2hu-c1f1-w4j8-48df37b921da\",\r
+
+          \t\t\t\"CostOnSite\": 285,\r
+
+          \t\t\t\"EstimatedDeliveryDate\": \"03.05.2026\",\r
+
+          \t\t\t\"IntDocNumber\": \"20451476533792\",\r
+
+          \t\t\t\"TypeDocument\": \"InternetDocument\"\r
+
+          \t\t}\r
+
+          \t],\r
+
+          \t\"errors\": [],\r
+
+          \t\"warnings\": [\r
+
+          \t\t\"DateTime is set to current\",\r
+
+          \t\t\"CargoType is changed to Parcel\"\r
+
+          \t],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [],\r
+
+          \t\"warningCodes\": [\r
+
+          \t\t\"30000200880\",\r
+
+          \t\t\"30000201469\"\r
+
+          \t],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"{{apiKey}}\",\r
+
+          \t\"modelName\": \"InternetDocumentGeneral\",\r
+
+          \t\"calledMethod\": \"save\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"PayerType\": \"Sender\",\r
+
+          \t\t\"PaymentMethod\": \"Cash\",\r
+
+          \t\t\"CargoType\": \"Cargo\",\r
+
+          \t\t\"Weight\": \"0.5\",\r
+
+          \t\t\"ServiceType\": \"DoorsWarehouse\",\r
+
+          \t\t\"SeatsAmount\": \"2\",\r
+
+          \t\t\"Description\": \"Додатковий опис відправлення\",\r
+
+          \t\t\"Cost\": \"15000\",\r
+
+          \t\t\"CitySender\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"Sender\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"ContactSender\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"SendersPhone\": \"380660000000\",\r
+
+          \t\t\"CityRecipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"Recipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"RecipientAddress\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"RecipientsPhone\": \"380660000000\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": false,\r
+
+          \t\"data\": [],\r
+
+          \t\"errors\": [\r
+
+          \t\t\"CitySender not found\",\r
+
+          \t\t\"CityRecipient not found\",\r
+
+          \t\t\"Recipient does not exists\",\r
+
+          \t\t\"ContactSender does not exists\"\r
+
+          \t],\r
+
+          \t\"warnings\": [\r
+
+          \t\t\"DateTime is set to current\",\r
+
+          \t\t\"CargoType is changed to Parcel\",\r
+
+          \t\t\"Can not create address for ContactPerson. Do not have relation with real address\",\r
+
+          \t\t\"Can not create address for ContactPerson. Do not have relation with real address\"\r
+
+          \t],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [\r
+
+          \t\t\"20000200106\",\r
+
+          \t\t\"20000200103\",\r
+
+          \t\t\"20000300428\",\r
+
+          \t\t\"20000300403\"\r
+
+          \t],\r
+
+          \t\"warningCodes\": [\r
+
+          \t\t\"30000200880\",\r
+
+          \t\t\"30000201469\"\r
+
+          \t],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\"modelName\": \"InternetDocumentGeneral\",\r
+
+          \t\"calledMethod\": \"save\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"PayerType\": \"Sender\",\r
+
+          \t\t\"PaymentMethod\": \"Cash\",\r
+
+          \t\t\"CargoType\": \"Cargo\",\r
+
+          \t\t\"Weight\": \"0.5\",\r
+
+          \t\t\"ServiceType\": \"DoorsWarehouse\",\r
+
+          \t\t\"SeatsAmount\": \"2\",\r
+
+          \t\t\"Description\": \"Додатковий опис відправлення\",\r
+
+          \t\t\"Cost\": \"15000\",\r
+
+          \t\t\"CitySender\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"Sender\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"SenderAddress\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"ContactSender\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"SendersPhone\": \"380660000000\",\r
+
+          \t\t\"CityRecipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"Recipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"RecipientAddress\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"ContactRecipient\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\t\"RecipientsPhone\": \"380660000000\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": false,\r
+
+          \    \"data\": [],\r
+
+          \    \"errors\": [\r
+
+          \        \"API key expired\"\r
+
+          \    ],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": [],\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [\r
+
+          \        \"20000201204\"\r
+
+          \    ],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+
+docs: |-
+  # 📦 Create Express Waybill (InternetDocument.save)
+
+  This method belongs to the `InternetDocument` model. It is the final and most important step of the integration: generating the actual Express Waybill (ЕН / Інтернет-документ).
+
+  💡 **Integration Strategy for Edge Cases:**  
+  This single endpoint handles multiple delivery scenarios. Depending on whether you are shipping to a branch, shipping to a door using raw text strings, or requesting Cash on Delivery (Післяплата), your JSON payload will change slightly. See the multiple examples at the bottom of this documentation.
+
+  ---
+
+  ## 🛡️ Pre-Flight Check (Crucial Validations)
+
+  To prevent API errors, validate the shipment data against the destination warehouse's capabilities (using data from `getWarehouses`):
+
+  1. **Weight Limits:** Verify shipment weight against `TotalMaxWeightAllowed` and `PlaceMaxWeightAllowed`. _(Volumetric weight:_ `Width(cm) * Length(cm) * Height(cm) / 4000`).
+      
+  2. **Declared Cost Limit:** Verify `Cost` does not exceed `MaxDeclaredCost`.
+      
+  3. **Payment Availability:** If the recipient pays at the branch, ensure it accepts payments: `warehouse.PaymentAccess == "1" || warehouse.POSTerminal == "1"`.
+      
+
+  ### 💳 Clarification on Payment Methods (`PaymentMethod`)
+
+  - **`"Cash"`** **(Payment on Delivery):** This means the service is paid when the package is picked up. _Important:_ This does NOT strictly mean physical paper money. The customer can pay by credit card at the branch's POS terminal. It simply signifies "Postpaid at the counter".
+      
+  - **`"NonCash"`** **(Remote / Contract Billing):** This means the delivery is paid remotely via a Nova Poshta corporate contract account (often by the Sender).
+      
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  _(Note: Not all parameters are required at the same time. Required fields depend on the_ `ServiceType` _and extra services like Backward Delivery)._
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `PayerType` | String | **Yes** | Who pays for the delivery: `"Sender"`, `"Recipient"`, or `"ThirdPerson"`. |
+  | `PaymentMethod` | String | **Yes** | `"Cash"` (Paid on pickup - card/cash) or `"NonCash"` (Paid by corporate contract). |
+  | `DateTime` | String | **Yes** | Planned shipping date in `DD.MM.YYYY` format. Max 3 months in the future. |
+  | `CargoType` | String | **Yes** | e.g., `"Cargo"`, `"Parcel"`, `"Documents"` (For documents, Weight must be 0.1, 0.5, or 1.0). |
+  | `VolumeGeneral` | String | **Yes** | Total volume of the shipment in cubic meters (m³). |
+  | `Weight` | String | **Yes** | Actual weight in kg. |
+  | `ServiceType` | String | **Yes** | e.g., `"WarehouseWarehouse"`, `"WarehouseDoors"`, `"DoorsWarehouse"`. |
+  | `SeatsAmount` | String | **Yes** | Number of boxes/places. |
+  | `Description` | String | **Yes** | Text description of the goods (e.g., "Одяг"). |
+  | `Cost` | String | **Yes** | Declared assessed value of the goods in UAH. |
+  | `CitySender` | String | **Yes** | Sender's City UUID. |
+  | `Sender` | String | **Yes** | Sender's business UUID. |
+  | `SenderAddress` | String | **Yes** | UUID of the Sender's drop-off Warehouse. |
+  | `ContactSender` | String | **Yes** | Sender's human contact UUID. |
+  | `SendersPhone` | String | **Yes** | Sender's phone number. |
+  | `CityRecipient` | String | Conditional | Recipient's City UUID (Required for Warehouse delivery). |
+  | `Recipient` | String | Conditional | Recipient's business/person UUID (Required for Warehouse delivery). |
+  | `RecipientAddress` | String | Conditional | UUID of the Destination Warehouse (Required for Warehouse delivery). |
+  | `ContactRecipient` | String | Conditional | Recipient's human contact UUID (Required for Warehouse delivery). |
+  | `RecipientsPhone` | String | **Yes** | Recipient's phone number. |
+  | `BackwardDeliveryData` | Array | No | Used for Cash on Delivery (Зворотня доставка грошей). See Example 3. |
+
+  ### 🏠 Extra Parameters for "WarehouseDoors" using Text Strings
+
+  If you are delivering to a specific address but don't want to sync massive street directories, you can pass the address as text strings.
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `NewAddress` | String | Conditional | Must be `"1"` when using string-based door delivery. |
+  | `RecipientCityName` | String | Conditional | Name of the recipient's city (Text). |
+  | `RecipientArea` | String | Conditional | Name of the Area / Область (Text). |
+  | `RecipientAreaRegions` | String | Conditional | Name of the District / Район (Text). |
+  | `RecipientAddressName` | String | Conditional | Name of the street (Text). |
+  | `RecipientHouse` | String | Conditional | House number. |
+  | `RecipientFlat` | String | Conditional | Apartment number. |
+  | `RecipientName` | String | Conditional | Full Name of the recipient (Text). |
+  | `RecipientType` | String | Conditional | `"PrivatePerson"` or `"Organization"`. |
+
+  ---
+
+  ## 📤 Response Parameters (`data` array items)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | `Ref` | String | Unique UUID of the created Express Waybill. Store this in your database. |
+  | `IntDocNumber` | String | The actual 14-digit tracking number (e.g., "20450000000000"). |
+  | `CostOnSite` | Number | The calculated delivery cost. |
+  | `EstimatedDeliveryDate` | String | The estimated date of arrival (`DD.MM.YYYY`). |
+
+  ---
+
+  ## 📋 JSON Payload Examples
+
+  ### Example 1: Standard Warehouse-to-Warehouse Delivery
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "InternetDocumentGeneral",
+     "calledMethod": "save",
+     "methodProperties": {
+        "PayerType": "Sender",
+        "PaymentMethod": "Cash",
+        "DateTime": "30.06.2026",
+        "CargoType": "Parcel",
+        "VolumeGeneral": "0.1",
+        "Weight": "2",
+        "ServiceType": "WarehouseWarehouse",
+        "SeatsAmount": "1",
+        "Description": "Взуття",
+        "Cost": "1500",
+        "CitySender": "00000000-0000-0000-0000-000000000000",
+        "Sender": "{{senderRef}}",
+        "SenderAddress": "00000000-0000-0000-0000-000000000000",
+        "ContactSender": "{{contactSenderRef}}",
+        "SendersPhone": "380660000000",
+        "CityRecipient": "00000000-0000-0000-0000-000000000000",
+        "Recipient": "00000000-0000-0000-0000-000000000000",
+        "RecipientAddress": "00000000-0000-0000-0000-000000000000",
+        "ContactRecipient": "00000000-0000-0000-0000-000000000000",
+        "RecipientsPhone": "380990000000"
+     }
+  }
+
+   ```
+
+  ### Example 2: Cash On Delivery / Післяплата (Warehouse-to-Warehouse)
+
+  _Includes_ `BackwardDeliveryData` _to return money to the Sender._
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "InternetDocumentGeneral",
+     "calledMethod": "save",
+     "methodProperties": {
+        "PayerType": "Recipient",
+        "PaymentMethod": "Cash",
+        "DateTime": "30.06.2026",
+        "CargoType": "Parcel",
+        "VolumeGeneral": "0.1",
+        "Weight": "2",
+        "ServiceType": "WarehouseWarehouse",
+        "SeatsAmount": "1",
+        "Description": "Телефон",
+        "Cost": "15000",
+        "CitySender": "00000000-0000-0000-0000-000000000000",
+        "Sender": "{{senderRef}}",
+        "SenderAddress": "00000000-0000-0000-0000-000000000000",
+        "ContactSender": "{{contactSenderRef}}",
+        "SendersPhone": "380660000000",
+        "CityRecipient": "00000000-0000-0000-0000-000000000000",
+        "Recipient": "00000000-0000-0000-0000-000000000000",
+        "RecipientAddress": "00000000-0000-0000-0000-000000000000",
+        "ContactRecipient": "00000000-0000-0000-0000-000000000000",
+        "RecipientsPhone": "380990000000",
+        "BackwardDeliveryData": [
+           {
+              "PayerType": "Recipient",
+              "CargoType": "Money",
+              "RedeliveryString": "15000"
+           }
+        ]
+     }
+  }
+
+   ```
+
+  ### Example 3: Door Delivery using Text Strings (No Recipient Ref Needed)
+
+  _Bypasses the need for Recipient UUIDs by passing raw address strings._
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "InternetDocumentGeneral",
+     "calledMethod": "save",
+     "methodProperties": {
+        "PayerType": "Sender",
+        "PaymentMethod": "Cash",
+        "DateTime": "30.06.2026",
+        "CargoType": "Parcel",
+        "VolumeGeneral": "0.1",
+        "Weight": "2",
+        "ServiceType": "WarehouseDoors",
+        "SeatsAmount": "1",
+        "Description": "Книги",
+        "Cost": "500",
+        "CitySender": "{{citySenderRef}}",
+        "Sender": "{{senderRef}}",
+        "SenderAddress": "00000000-0000-0000-0000-000000000000",
+        "ContactSender": "{{contactSenderRef}}",
+        "SendersPhone": "380660000000",
+        "RecipientsPhone": "380990000000",
+        "NewAddress": "1",
+        "RecipientCityName": "Київ",
+        "RecipientArea": "Київська",
+        "RecipientAreaRegions": "",
+        "RecipientAddressName": "Хрещатик",
+        "RecipientHouse": "22",
+        "RecipientFlat": "14",
+        "RecipientName": "Коваленко Петро Петрович",
+        "RecipientType": "PrivatePerson"
+     }
+  }
+
+   ```
+
+  After the successful response you can find waybill info in your personal account (https://new.novaposhta.ua/dashboard/invoices-my)
+
+  <img src="https://content.pstmn.io/deee4afe-1155-4c67-a094-b65e9331ad1a/0JfQvdGW0LzQvtC6INC10LrRgNCw0L3QsCAyMDI2LTA2LTMwIDEzNDk0MC5wbmc=" width="948" height="395">

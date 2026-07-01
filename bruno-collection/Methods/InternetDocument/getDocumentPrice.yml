@@ -1,0 +1,379 @@
+info:
+  name: getDocumentPrice
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "InternetDocumentGeneral",
+        "calledMethod": "getDocumentPrice",
+        "methodProperties": {
+          "CitySender": "{{citySender}}",
+          "CityRecipient": "{{cityRecipient}}",
+          "Weight": "0.4",
+          "ServiceType": "WarehouseWarehouse",
+          "Cost": "300",
+          "CargoType": "Cargo",
+          "SeatsAmount": "2"
+        }
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: citySender
+      value: 8d5a980d-391c-11dd-90d9-001a92567626
+    - name: cityRecipient
+      value: 6dbe5985-96d1-11ea-a970-b8830365ade4
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"{{apiKey}}\",\r
+
+          \t\"modelName\": \"InternetDocumentGeneral\",\r
+
+          \t\"calledMethod\": \"getDocumentPrice\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r
+
+          \t\t\"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r
+
+          \t\t\"Weight\": \"0.4\",\r
+
+          \t\t\"ServiceType\": \"WarehouseWarehouse\",\r
+
+          \t\t\"Cost\": \"300\",\r
+
+          \t\t\"CargoType\": \"Cargo\",\r
+
+          \t\t\"SeatsAmount\": \"2\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": true,\r
+
+          \t\"data\": [\r
+
+          \t\t{\r
+
+          \t\t\t\"Cost\": 210,\r
+
+          \t\t\t\"AssessedCost\": 300\r
+
+          \t\t}\r
+
+          \t],\r
+
+          \t\"errors\": [],\r
+
+          \t\"warnings\": [\r
+
+          \t\t\"DateTime is set to current\",\r
+
+          \t\t\"CargoType is changed to Parcel\"\r
+
+          \t],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [],\r
+
+          \t\"warningCodes\": [\r
+
+          \t\t\"30000200880\",\r
+
+          \t\t\"30000201469\"\r
+
+          \t],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"apiKey": "{{apiKey}}",
+          	"modelName": "InternetDocumentGeneral",
+          	"calledMethod": "getDocumentPrice",
+          	"methodProperties": {
+          		"CitySender": "00000000-0000-0000-0000-000000000000",
+          		"CityRecipient": "00000000-0000-0000-0000-000000000000",
+          		"Weight": "0.4",
+          		"ServiceType": "WarehouseWarehouse",
+          		"Cost": "300",
+          		"CargoType": "Cargo",
+          		"SeatsAmount": "2"
+          	}
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": false,\r
+
+          \t\"data\": [],\r
+
+          \t\"errors\": [\r
+
+          \t\t\"CityRecipient incorrect\"\r
+
+          \t],\r
+
+          \t\"warnings\": [\r
+
+          \t\t\"DateTime is set to current\"\r
+
+          \t],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [\r
+
+          \t\t\"20000200102\"\r
+
+          \t],\r
+
+          \t\"warningCodes\": [\r
+
+          \t\t\"30000200880\"\r
+
+          \t],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\"modelName\": \"InternetDocumentGeneral\",\r
+
+          \t\"calledMethod\": \"getDocumentPrice\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CitySender\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r
+
+          \t\t\"CityRecipient\": \"6dbe5985-96d1-11ea-a970-b8830365ade4\",\r
+
+          \t\t\"Weight\": \"0.4\",\r
+
+          \t\t\"ServiceType\": \"WarehouseWarehouse\",\r
+
+          \t\t\"Cost\": \"300\",\r
+
+          \t\t\"CargoType\": \"Cargo\",\r
+
+          \t\t\"SeatsAmount\": \"2\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": false,\r
+
+          \    \"data\": [],\r
+
+          \    \"errors\": [\r
+
+          \        \"API key expired\"\r
+
+          \    ],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": [],\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [\r
+
+          \        \"20000201204\"\r
+
+          \    ],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+
+docs: |-
+  # 💰 Calculate Delivery Cost (getDocumentPrice)
+
+  This method belongs to the `InternetDocument` model (called using `InternetDocumentGeneral` in the payload). It calculates the estimated delivery cost for a shipment before you actually create the waybill.
+
+  It supports various types of shipments including standard parcels, documents, tires & wheels, and pallets. It can also calculate the cost based on precise volumetric dimensions and additional packaging.
+
+  💡 **Best Practice & Critical Naming Quirk:**  
+  There is a major naming overlap in this method:
+
+  - The `Cost` parameter you send in the **REQUEST** represents the **Declared Value** of the goods (Assessed Cost).
+      
+  - The `Cost` parameter returned in the **RESPONSE** represents the **Price of Delivery** that the client needs to pay.
+      
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `CitySender` | String | **Yes** | UUID of the sender's city (`Ref` from `getCities`). |
+  | `CityRecipient` | String | **Yes** | UUID of the recipient's city (`Ref` from `getCities`). |
+  | `Weight` | String/Number | **Yes** | Total actual weight of the shipment in kg. |
+  | `ServiceType` | String | **Yes** | Type of delivery route (e.g., `"WarehouseWarehouse"`, `"WarehouseDoors"`, `"DoorsWarehouse"`, `"DoorsDoors"`). |
+  | `Cost` | String/Number | **Yes** | **Declared Value** of the shipment (in UAH). Used to calculate insurance. |
+  | `CargoType` | String | **Yes** | Type of cargo (e.g., `"Parcel"`, `"Cargo"`, `"Documents"`, `"TiresWheels"`, `"Pallet"`). |
+  | `SeatsAmount` | String/Number | **Yes** | Number of seats/places (boxes) in the shipment. |
+  | `OptionsSeat` | Array | No | Used to specify exact dimensions (Width, Length, Height) and packaging for each seat. |
+  | `CargoDetails` | Array | No | Used specifically for `"TiresWheels"` to specify the tire type UUID and amount. |
+
+  ### Example Request Body (Basic Parcel)
+
+  ``` json
+  {
+      "apiKey": "{{apiKey}}",
+      "modelName": "InternetDocumentGeneral",
+      "calledMethod": "getDocumentPrice",
+      "methodProperties": {
+          "CitySender": "8d5a980d-391c-11dd-90d9-001a92567626",
+          "CityRecipient": "6dbe5985-96d1-11ea-a970-b8830365ade4",
+          "Weight": "0.4",
+          "ServiceType": "WarehouseWarehouse",
+          "Cost": "300",
+          "CargoType": "Parcel",
+          "SeatsAmount": "1"
+      }
+  }
+
+   ```
+
+  ### Example Request Body (With Exact Dimensions & Packaging)
+
+  ``` json
+  {
+      "apiKey": "{{apiKey}}",
+      "modelName": "InternetDocumentGeneral",
+      "calledMethod": "getDocumentPrice",
+      "methodProperties": {
+          "CitySender": "8d5a980d-391c-11dd-90d9-001a92567626",
+          "CityRecipient": "6dbe5985-96d1-11ea-a970-b8830365ade4",
+          "ServiceType": "WarehouseWarehouse",
+          "Cost": "1500",
+          "CargoType": "Cargo",
+          "SeatsAmount": "1",
+          "OptionsSeat": [
+              {
+                  "weight": 5, 
+                  "volumetricWidth": 80, 
+                  "volumetricLength": 25, 
+                  "volumetricHeight": 25,
+                  "packRef": "1499fa4a-d26e-11e1-95e4-0026b97ed48a" 
+              }
+          ]
+      }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Cost | Number | Calculated delivery cost (UAH) |
+  | AssessedCost | Number | Declared shipment value used for calculation (UAH) |
+  | warnings | Array | API warnings or automatic adjustments (e.g., "CargoType is changed to Parcel") |
+
+  ### Example Response Body
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "Cost": 210,
+              "AssessedCost": 300
+          }
+      ],
+      "errors": [],
+      "warnings": [
+          "DateTime is set to current",
+          "CargoType is changed to Parcel"
+      ],
+      "info": [],
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [
+          "30000200880",
+          "30000201469"
+      ],
+      "infoCodes": []
+  }
+
+   ```

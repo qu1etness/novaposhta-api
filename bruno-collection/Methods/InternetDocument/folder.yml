@@ -1,0 +1,11 @@
+info:
+  name: InternetDocument
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit
+
+docs:
+  content: "Folder contains following methods:"
+  type: text/markdown

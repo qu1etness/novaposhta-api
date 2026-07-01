@@ -1,0 +1,58 @@
+info:
+  name: Counterparty
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit
+
+docs:
+  content: |-
+    # 👤 Counterparty Module (Contragents & Contact Persons)
+
+    The **Counterparty** module is the foundational core for managing senders and recipients within the Nova Poshta ecosystem. Before you can generate an Express Waybill (ЕН), you must create or identify the counterparties involved in the delivery process.
+
+    Nova Poshta divides participant data into two distinct layers. Understanding this architectural split is critical for a smooth integration.
+
+    ---
+
+    ## 🏗️ Architectural Concept: Counterparty vs. Contact Person
+
+    Every participant in the shipping process is represented by two linked entities:
+
+    1. **Counterparty (Контрагент):**  
+        This represents the "legal or physical entity" tied to a contract or profile. For standard B2C e-commerce, this is typically a `PrivatePerson`.
+        
+        - _Waybill Parameter:_ Passed as `Sender` or `Recipient`.
+            
+    2. **Contact Person (Контактна особа):**  
+        This represents the "actual human being" who drops off or picks up the package (requiring a phone number and a name that matches their ID). A single Counterparty can have multiple Contact Persons (e.g., a company counterparty with multiple employees).
+        
+        - _Waybill Parameter:_ Passed as `ContactSender` or `ContactRecipient`.
+            
+
+    > ⚠️ **Crucial Note for B2C Integration:**  
+    Even if you are shipping to a regular individual customer where the entity and the human are the same person, **the API still requires you to generate and pass both unique Refs** to create a shipment document. 
+      
+
+    ---
+
+    ## 🔄 Core Synchronization Rules & Idempotency
+
+    - **Find or Create Behavior:** The creation methods in this module are idempotent. If a customer with the same phone number and name already exists in the Nova Poshta system, the API will not reject the request. Instead, it will automatically fetch and return the existing profile records along with a warning (`"Person already exists!"`). This allows you to safely use a "find-or-create" loop in your checkout flow.
+        
+    - **Data Language:** All names (First, Middle, Last) and company details must be submitted **strictly in Ukrainian**.
+        
+    - **Dynamic Reference Data:** Unlike administrative directories (such as Cities or Warehouses), Counterparty data is highly dynamic. You should generate or query these profiles in real-time during user interaction or order processing.
+        
+
+    ---
+
+    ## 🛠️ Main Methods inside this Folder
+
+    - **`save`** **(CounterpartyGeneral / Counterparty):** Creates or retrieves a counterparty profile and its nested contact person. This is your primary entry point for setting up delivery recipients.
+        
+    - **`getCounterparties:`**Fetches a list of counterparties linked to your API key account (e.g., your own sender profiles).
+        
+    - **`getCounterpartyContactPersons:`**Retrieves all contact persons associated with a specific counterparty UUID. Useful when managing business clients or repeat senders.
+  type: text/markdown

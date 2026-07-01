@@ -1,0 +1,21 @@
+info:
+  name: Methods
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+
+docs:
+  content: |-
+    ##### Collection contains minimum amount of Customer API methods for NovaPoshta environment to integrate delivery to your service
+
+    🚨 **CRITICAL WARNING:** 200 OK on each request  
+    The API always returns HTTP Status 200 OK, even if there is a logical error in your request payload. You must parse the `success` boolean field in the JSON response to verify if the request was actually successful.
+
+    ##### Folder contains:
+
+    - Addresses
+        
+    - Counterparty
+  type: text/markdown

@@ -1,0 +1,82 @@
+opencollection: 1.0.0
+
+info:
+  name: NovaPoshta API
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  variables:
+    - name: apiKey
+      value: ""
+    - name: baseUrl
+      value: https://api.novaposhta.ua/v2.0/json/
+    - name: senderRef
+      value: ""
+    - name: contactSenderRef
+      value: ""
+  scripts:
+    - type: before-request
+      code: "// Ensure JSON content type is present for all requests in this collection\r
+
+        req.setHeader('Content-Type', 'application/json');"
+
+docs:
+  content: |-
+    # 🚀 Nova Poshta API v2.0 Postman Collection
+
+    ⚠️ **Note:** This collection is designed for the **domestic delivery API (v2.0)**. If you are looking for the international shipping API, please refer to the [Nova Post International API](https://api.novapost.com/developers/index.html).
+
+    ## 🔖 How to Get Started
+
+    ### Step 1: Obtain Your API Key
+
+    To interact with the API, you need a registered account and an API access key.
+
+    1. Log in to the [Nova Poshta Dashboard](https://www.google.com/search?q=https://new.novaposhta.ua/dashboard/settings/developers).
+        
+    2. Generate your API key in the developer settings section.
+        
+
+    🎥 _Need help? Check out this_ [<i>Video Tutorial</i>](https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3DQN6jF63v3VE) _on how to get your key._
+
+    🚨 **CRITICAL WARNING: NO SANDBOX ENVIRONMENT**  
+    Please be aware that **there is no test environment** for the NP API v2.0. All requests made from this collection will be sent directly to your **production** personal account.  
+    **Make sure to cancel and delete all test shipments** you create! You can manage and delete your test data directly from your [personal dashboard](https://new.novaposhta.ua/dashboard).
+
+    ### Step 2: Configure Collection Variables
+
+    Before sending your first request, you must configure the environment variables for this collection. Go to the **Variables** tab of this collection and set the following:
+
+    - `apiKey`: Paste the API key you generated in Step 1.
+        
+    - `baseUrl`: Set the entry point depending on the data format you plan to use.
+        
+        - 👉 **JSON (Default):** `https://api.novaposhta.ua/v2.0/json/`
+            
+        - 👉 **XML:** `https://api.novaposhta.ua/v2.0/xml/`
+            
+
+    _Note: Data exchange is carried out securely over HTTPS. Nova Poshta API v2.0 uses POST methods with JSON/XML payloads for almost all operations._
+
+    ## 📚 Official Resources
+
+    - [Official Developer Documentation](https://www.google.com/search?q=https://developers.novaposhta.ua/)
+        
+    - [Nova Poshta User Dashboard](https://new.novaposhta.ua/dashboard)
+  type: text/markdown
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

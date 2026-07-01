@@ -1,0 +1,287 @@
+info:
+  name: getCounterpartyContactPersons
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+         "apiKey": "{{apiKey}}",
+         "modelName": "CounterpartyGeneral",
+         "calledMethod": "getCounterpartyContactPersons",
+         "methodProperties": {
+            "Ref": "{{senderRef}}",
+            "Page": "1"
+         }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+             "apiKey": "{{apiKey}}",
+             "modelName": "CounterpartyGeneral",
+             "calledMethod": "getCounterpartyContactPersons",
+             "methodProperties": {
+                "Ref": "{{senderRef}}",
+                "Page": "1"
+             }
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": true,\r
+
+          \    \"data\": [\r
+
+          \        {\r
+
+          \            \"Ref\": \"08cb0000-0000-0000-0000-000037b921da\",\r
+
+          \            \"Description\": \"Іванов Іван Іванович\",\r
+
+          \            \"Phones\": \"380991234567\",\r
+
+          \            \"Email\": \"sender@business.com\",\r
+
+          \            \"LastName\": \"Іванов\",\r
+
+          \            \"FirstName\": \"Іван\",\r
+
+          \            \"MiddleName\": \"Іванович\"\r
+
+          \        }\r
+
+          \    ],\r
+
+          \    \"errors\": [],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": {\r
+
+          \        \"totalCount\": 1\r
+
+          \    },\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \   \"apiKey\": \"{{apiKey}}\",\r
+
+          \   \"modelName\": \"CounterpartyGeneral\",\r
+
+          \   \"calledMethod\": \"getCounterpartyContactPersons\",\r
+
+          \   \"methodProperties\": {\r
+
+          \      \"Ref\": \"00000000-0000-0000-0000-00000000\",\r
+
+          \      \"Page\": \"1\"\r
+
+          \   }\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": false,\r
+
+          \t\"data\": [],\r
+
+          \t\"errors\": [\r
+
+          \t\t\"Counterparty not found\"\r
+
+          \t],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [\r
+
+          \t\t\"20000400454\"\r
+
+          \t],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+             "apiKey": "00000000-0000-0000-0000-000000000000",
+             "modelName": "CounterpartyGeneral",
+             "calledMethod": "getCounterpartyContactPersons",
+             "methodProperties": {
+                "Ref": "{{senderRef}}",
+                "Page": "1"
+             }
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+              "success": false,
+              "data": [],
+              "errors": [
+                  "API key expired"
+              ],
+              "warnings": [],
+              "info": [],
+              "messageCodes": [],
+              "errorCodes": [
+                  "20000201204"
+              ],
+              "warningCodes": [],
+              "infoCodes": []
+          }
+
+docs: |-
+  # 👥 Get Counterparty Contact Persons
+
+  This method belongs to the `Counterparty` model (called using `CounterpartyGeneral` in the payload). It retrieves the list of contact persons associated with a specific counterparty (business or individual).
+
+  💡 **Best Practice for Setup (Single Sender Context):**  
+  While the official documentation suggests updating this directory daily, for most e-commerce setups with a single sender, you only need to run this method **once during your initial API setup**.  
+  You use this method to find your own contact profile (the human sender) by passing your business's `SenderRef` which you recieve from getCounterparty method. You then copy the returned `Ref` from the response and hardcode it as `{{contactSenderRef}}` in your Postman Environment variables. This UUID is mandatory for the `ContactSender` field when creating an Express Waybill.
+
+  ### ⚠️ Important Notes
+
+  - **Pagination:** If a counterparty has more than 100 contact persons, you must use the `Page` parameter to fetch subsequent records.
+      
+  - **Error Handling:** If you pass an invalid or non-existent counterparty `Ref`, the API will return `"success": false` with a `"Counterparty not found"` error.
+      
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `Ref` | String | **Yes** | The UUID of the Counterparty entity (obtained from `getCounterparties` or `save`). |
+  | `Page` | String | No | Page number for pagination (e.g., "1"). Required if results exceed 100. |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "CounterpartyGeneral",
+     "calledMethod": "getCounterpartyContactPersons",
+     "methodProperties": {
+        "Ref": "00000000-0000-0000-0000-000000000000",
+        "Page": "1"
+     }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Ref | String | Contact person UUID (store as `{{contactSenderRef}}`) |
+  | Description | String | Full name (UA) |
+  | LastName | String | Last name |
+  | FirstName | String | First name |
+  | MiddleName | String | Middle name (patronymic) |
+  | Phones | String | Phone number |
+  | Email | String | Email address |
+
+  ### Example Response Body (Success)
+
+  _(Note: If the_ `Ref` _in the request is invalid, the API returns a "Counterparty not found" error. Below is a successful response so you can identify the structure)._
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "Ref": "08cb530b-0000-0000-0000-48df37b921da",
+              "Description": "Іванов Іван Іванович",
+              "Phones": "380991234567",
+              "Email": "sender@business.com",
+              "LastName": "Іванов",
+              "FirstName": "Іван",
+              "MiddleName": "Іванович"
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": {
+          "totalCount": 1
+      },
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

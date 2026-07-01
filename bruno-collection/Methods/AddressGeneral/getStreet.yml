@@ -1,0 +1,268 @@
+info:
+  name: getStreet
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "AddressGeneral",
+        "calledMethod": "getStreet",
+        "methodProperties": {
+          "CityRef": "{{cityRef}}",
+          "FindByString": "Київ",
+          "Page": "1",
+          "Limit": ""
+        }
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: cityRef
+      value: 00000000-0000-0000-0000-000000000000
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"{{apiKey}}\",\r
+
+          \t\"modelName\": \"AddressGeneral\",\r
+
+          \t\"calledMethod\": \"getStreet\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CityRef\": \"8d5a980d-391c-11dd-90d9-001a92567626\",\r
+
+          \        \"FindByString\": \"Київ\",\r
+
+          \        \"Page\": \"1\",\r
+
+          \        \"Limit\": \"1\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"success": true,
+          	"data": [
+          		{
+          			"Description": "Київська (Жуляни)",
+          			"Ref": "d4450bcc-0a58-11de-b6f5-001d92f78697",
+          			"StreetsTypeRef": "Street",
+          			"StreetsType": "вул."
+          		}
+          	],
+          	"errors": [],
+          	"warnings": [],
+          	"info": {
+          		"totalCount": 1
+          	},
+          	"messageCodes": [],
+          	"errorCodes": [],
+          	"warningCodes": [],
+          	"infoCodes": []
+          }
+          }
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": {{apiKey}},\r
+
+          \t\"modelName\": \"AddressGeneral\",\r
+
+          \t\"calledMethod\": \"getStreet\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"success": false,
+          	"data": [],
+          	"errors": [
+          		"CityRef is not specified"
+          	],
+          	"warnings": [],
+          	"info": [],
+          	"messageCodes": [],
+          	"errorCodes": [
+          		"20000900767"
+          	],
+          	"warningCodes": [],
+          	"infoCodes": []
+          }
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \t\"modelName\": \"AddressGeneral\",\r
+
+          \t\"calledMethod\": \"getStreet\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CityRef\": \"00000000-0000-0000-0000-000000000000\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+              "success": false,
+              "data": [],
+              "errors": [
+                  "API key expired"
+              ],
+              "warnings": [],
+              "info": [],
+              "messageCodes": [],
+              "errorCodes": [
+                  "20000201204"
+              ],
+              "warningCodes": [],
+              "infoCodes": []
+          }
+
+docs: |-
+  # 🛣️ Get Streets
+
+  This method belongs to the `AddressGeneral` model. It is used to download the directory of streets within a specific settlement where Nova Poshta provides door-to-door delivery.
+
+  💡 **Best Practice for Integration:**  
+  This directory is essential when creating waybills (shipments) with delivery types involving a client's address (e.g., Warehouse-to-Door, Door-to-Door). Because large cities have thousands of streets, it is highly recommended to use the `FindByString` parameter to implement real-time search (autocomplete) rather than downloading the entire list.
+
+  ### ⚠️ Important Notes
+
+  - **Mandatory Parameter:** You **must** pass the `CityRef` parameter. You can obtain this UUID by using the `getCities` method.
+      
+  - **Language Restriction:** String search (`FindByString`) is supported **strictly in Ukrainian**.
+      
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | **Parameter** | **Type** | **Required** | **Description** |
+  | --- | --- | --- | --- |
+  | `CityRef` | String | **Yes** | Unique UUID of the city. Obtained from the `getCities` method. |
+  | `FindByString` | String | No | Search by street name or avenue (e.g., "Хрещатик"). |
+  | `Page` | String | No | The page number for pagination (e.g., "1"). |
+  | `Limit` | String | No | Number of records per page. |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "AddressGeneral",
+     "calledMethod": "getStreet",
+     "methodProperties": {
+        "CityRef": "00000000-0000-0000-0000-000000000000",
+        "FindByString": "Хрещатик",
+        "Page": "1",
+        "Limit": "50"
+     }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Ref | String | Street UUID |
+  | Description | String | Name in Ukrainian |
+  | DescriptionRu | String | Name in Russian |
+  | DescriptionTranslit | String | Name in transliteration |
+  | StreetsTypeRef | String | Street type UUID (e.g., street, avenue, lane) |
+  | StreetsType | String | Short type in Ukrainian (e.g., "вул.", "просп.", "пров.") |
+  | StreetsTypeRu | String | Short type in Russian |
+  | StreetsTypeTranslit | String | Short type in transliteration |
+
+  ### Example Response Body
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "Description": "1-а Вишнева",
+              "Ref": "ef905acd-e1f4-11e5-899e-005056887b8d",
+              "StreetsTypeRef": "Street",
+              "StreetsType": "вул."
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": {
+          "totalCount": 2825
+      },
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

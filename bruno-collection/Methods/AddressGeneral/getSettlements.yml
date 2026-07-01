@@ -1,0 +1,427 @@
+info:
+  name: getSettlements
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "AddressGeneral",
+        "calledMethod": "getSettlements",
+        "methodProperties": {
+          "AreaRef": "{{areaRef}}",
+          "Ref": "{{settlementRef}}",
+          "RegionRef": "{{regionRef}}",
+          "Page": "1",
+          "Warehouse": "1",
+          "FindByString": "Київ",
+          "Limit": "20"
+        }
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: areaRef
+      value: 00000000-0000-0000-0000-000000000000
+    - name: settlementRef
+      value: 00000000-0000-0000-0000-000000000000
+    - name: regionRef
+      value: 00000000-0000-0000-0000-000000000000
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \  \"apiKey\": \"{{apiKey}}\",\r
+
+          \  \"modelName\": \"AddressGeneral\",\r
+
+          \  \"calledMethod\": \"getSettlements\",\r
+
+          \  \"methodProperties\": {\r
+
+          \        \"AreaRef\": \"\",\r
+
+          \        \"Limit\": \"2\",\r
+
+          \        \"Page\": \"1\",\r
+
+          \        \"RegionRef\": \"\",\r
+
+          \        \"Warehouse\": \"1\",\r
+
+          \        \"FindByString\": \"Київ\"\r
+
+          \  }\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": true,\r
+
+          \t\"data\": [\r
+
+          \t\t{\r
+
+          \t\t\t\"Ref\": \"0e451e40-4b3a-11e4-ab6d-005056801329\",\r
+
+          \t\t\t\"SettlementType\": \"563ced13-f210-11e3-8c4a-0050568002cf\",\r
+
+          \t\t\t\"Latitude\": \"49.605372000000000\",\r
+
+          \t\t\t\"Longitude\": \"34.335613000000000\",\r
+
+          \t\t\t\"Description\": \"Абазівка\",\r
+
+          \t\t\t\"DescriptionRu\": \"Абазовка\",\r
+
+          \t\t\t\"DescriptionTranslit\": \"Abazivka\",\r
+
+          \t\t\t\"SettlementTypeDescription\": \"село\",\r
+
+          \t\t\t\"SettlementTypeDescriptionRu\": \"село\",\r
+
+          \t\t\t\"SettlementTypeDescriptionTranslit\": \"selo\",\r
+
+          \t\t\t\"Region\": \"e4ade6ea-4b33-11e4-ab6d-005056801329\",\r
+
+          \t\t\t\"RegionsDescription\": \"Полтавський\",\r
+
+          \t\t\t\"RegionsDescriptionRu\": \"Полтавский р-н\",\r
+
+          \t\t\t\"RegionsDescriptionTranslit\": \"Poltavskyi\",\r
+
+          \t\t\t\"Area\": \"dcaadf02-4b33-11e4-ab6d-005056801329\",\r
+
+          \t\t\t\"AreaDescription\": \"Полтавська\",\r
+
+          \t\t\t\"AreaDescriptionRu\": \"Полтавская область\",\r
+
+          \t\t\t\"AreaDescriptionTranslit\": \"Poltavska\",\r
+
+          \t\t\t\"Index1\": \"38715\",\r
+
+          \t\t\t\"Index2\": \"38715\",\r
+
+          \t\t\t\"IndexCOATSU1\": \"5324080101\",\r
+
+          \t\t\t\"Delivery1\": \"1\",\r
+
+          \t\t\t\"Delivery2\": \"0\",\r
+
+          \t\t\t\"Delivery3\": \"1\",\r
+
+          \t\t\t\"Delivery4\": \"0\",\r
+
+          \t\t\t\"Delivery5\": \"1\",\r
+
+          \t\t\t\"Delivery6\": \"0\",\r
+
+          \t\t\t\"Delivery7\": \"0\",\r
+
+          \t\t\t\"SpecialCashCheck\": 1,\r
+
+          \t\t\t\"RadiusHomeDelivery\": \"500\",\r
+
+          \t\t\t\"RadiusExpressPickUp\": \"500\",\r
+
+          \t\t\t\"RadiusDrop\": \"500\",\r
+
+          \t\t\t\"Warehouse\": \"1\",\r
+
+          \t\t\t\"AddressDeliveryAllowed\": true\r
+
+          \t\t}\r
+
+          \t],\r
+
+          \t\"errors\": [],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": {\r
+
+          \t\t\"totalCount\": 26792\r
+
+          \t},\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"apiKey": "{{apiKey}}",
+          	"modelName": "AddressGeneral",
+          	"calledMethod": "getSettlements",
+          	"methodProperties": {
+          		"AreaRef": "00000000-0000-0000-0000-000000000000"
+          	}
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+              "success": false,
+              "data": [],
+              "errors": {
+                  "AreaRef": "AreaRef not found"
+              },
+              "warnings": [],
+              "info": [],
+              "messageCodes": [],
+              "errorCodes": [
+                  "20000501022"
+              ],
+              "warningCodes": [],
+              "infoCodes": []
+          }
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |
+          {
+            "apiKey": "00000000-0000-0000-0000-000000000000",
+             "modelName": "AddressGeneral",
+             "calledMethod": "getSettlements",
+             "methodProperties": {
+                  "Page" : "1",
+                  "Warehouse" : "1",
+                  "FindByString" : "Київ",
+                  "Limit" : "20"
+             }
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": false,\r
+
+          \t\"data\": [],\r
+
+          \t\"errors\": [\r
+
+          \t\t\"API key expired\"\r
+
+          \t],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [\r
+
+          \t\t\"20000201204\"\r
+
+          \t],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+
+docs: |-
+  ## 🏙️ Get Settlements (Cities & Villages)
+
+  This method belongs to the `AddressGeneral` model. It allows you to download the complete directory of settlements (cities, towns, villages) in Ukraine where Nova Poshta provides delivery services. The response includes region and district data for each settlement.
+
+  💡 **Best Practice for Integration:**
+
+  It is highly recommended to download this directory and store it in your local database, updating it approximately **once a month**. Avoid making real-time calls to this method during user checkout.
+
+  ### ⚠️ Important Notes
+
+  - **Language Restriction:** String search (`FindByString`) is supported **strictly in Ukrainian**.
+      
+  - **Pagination:** The API returns a maximum of 150 records per page. To fetch all data, you must iterate using the `Page` and `Limit` parameters.
+      
+  - **HTTP Status Quirk:** The API **always returns HTTP Status 200 OK**, even if there is a logical error in your request payload. You must parse the `success` boolean field in the JSON response to verify if the request was actually successful.
+      
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | Page | String | No | Page number (e.g., "1") |
+  | Limit | String | No | Max 150 records |
+  | FindByString | String | No | Search in Ukrainian (e.g., "Київ") |
+  | Warehouse | String | No | "1" = only with NP branches |
+  | AreaRef | String | No | Area UUID |
+  | RegionRef | String | No | Region UUID |
+  | Ref | String | No | Settlement UUID |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "AddressGeneral",
+     "calledMethod": "getSettlements",
+     "methodProperties": {
+        "AreaRef": "00000000-0000-0000-0000-000000000000",
+        "Ref": "00000000-0000-0000-0000-000000000000",
+        "RegionRef": "00000000-0000-0000-0000-000000000000",
+        "Page": "1",
+        "Limit": "20",
+        "Warehouse": "1",
+        "FindByString": "Київ"
+     }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Ref | String | Settlement UUID |
+  | SettlementType | String | Settlement type UUID |
+  | Description | String | Name in Ukrainian |
+  | DescriptionRu | String | Name in Russian |
+  | DescriptionTranslit | String | Name in transliteration |
+  | SettlementTypeDescription | String | Type in Ukrainian (e.g., "місто", "село") |
+  | SettlementTypeDescriptionRu | String | Type in Russian |
+  | SettlementTypeDescriptionTranslit | String | Type in transliteration |
+  | Region | String | District/region UUID |
+  | RegionsDescription | String | District/region name (UA) |
+  | RegionsDescriptionRu | String | District/region name (RU) |
+  | RegionsDescriptionTranslit | String | District/region name (translit) |
+  | Area | String | Area UUID |
+  | AreaDescription | String | Area name (UA) |
+  | AreaDescriptionRu | String | Area name (RU) |
+  | AreaDescriptionTranslit | String | Area name (translit) |
+  | Latitude | String | Latitude coordinate |
+  | Longitude | String | Longitude coordinate |
+  | Warehouse | String | "1" = has NP branches, "0" = no branches |
+  | AddressDeliveryAllowed | Boolean | `true` = courier delivery available |
+  | RadiusHomeDelivery | String | Courier delivery radius |
+  | RadiusExpressPickUp | String | Express pick-up radius |
+  | RadiusDrop | String | Drop-off radius |
+  | SpecialCashCheck | Number | "1" = special cash check required |
+  | Delivery1 | String | Delivery on Monday |
+  | Delivery2 | String | Delivery on Tuesday |
+  | Delivery3 | String | Delivery on Wednesday |
+  | Delivery4 | String | Delivery on Thursday |
+  | Delivery5 | String | Delivery on Friday |
+  | Delivery6 | String | Delivery on Saturday |
+  | Delivery7 | String | Delivery on Sunday |
+  | Index1 | String | Primary postal code |
+  | Index2 | String | Secondary postal code |
+  | IndexCOATSU1 | String | KOATUU code |
+  | info.totalCount | Number | Total number of records (root level) |
+
+  ### Example Response Body
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "Ref": "0db2df4b-4b3a-11e4-ab6d-005056801329",
+              "SettlementType": "563ced13-f210-11e3-8c4a-0050568002cf",
+              "Latitude": "47.866313000000000",
+              "Longitude": "31.019312000000000",
+              "Description": "Київ",
+              "DescriptionRu": "Червоный Киев",
+              "DescriptionTranslit": "Kyiv",
+              "SettlementTypeDescription": "село",
+              "SettlementTypeDescriptionRu": "село",
+              "SettlementTypeDescriptionTranslit": "selo",
+              "Region": "e4ace22a-4b33-11e4-ab6d-005056801329",
+              "RegionsDescription": "Вознесенський",
+              "RegionsDescriptionRu": "Вознесенский р-н",
+              "RegionsDescriptionTranslit": "Voznesenskyi",
+              "Area": "dcaaddd7-4b33-11e4-ab6d-005056801329",
+              "AreaDescription": "Миколаївська",
+              "AreaDescriptionRu": "Николаевская область",
+              "AreaDescriptionTranslit": "Mykolaivska",
+              "Index1": "56419",
+              "Index2": "56419",
+              "IndexCOATSU1": "4822780907",
+              "Delivery1": "",
+              "Delivery2": "",
+              "Delivery3": "",
+              "Delivery4": "",
+              "Delivery5": "",
+              "Delivery6": "",
+              "Delivery7": "",
+              "SpecialCashCheck": 1,
+              "RadiusHomeDelivery": "500",
+              "RadiusExpressPickUp": "500",
+              "RadiusDrop": "500",
+              "Warehouse": "0",
+              "AddressDeliveryAllowed": true
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": {
+          "totalCount": 9
+      },
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```

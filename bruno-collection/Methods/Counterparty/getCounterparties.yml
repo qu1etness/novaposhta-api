@@ -1,0 +1,310 @@
+info:
+  name: getCounterparties
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "apiKey": "{{apiKey}}",
+        "modelName": "CounterpartyGeneral",
+        "calledMethod": "save",
+        "methodProperties": {
+          "CounterpartyProperty": "Sender",
+          "Page": "1"
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Successful Response
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"apiKey": "{{apiKey}}",
+          	"modelName": "CounterpartyGeneral",
+          	"calledMethod": "getCounterparties",
+          	"methodProperties": {
+          		"CounterpartyProperty": "Sender"
+          	}
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \    \"success\": true,\r
+
+          \    \"data\": [\r
+
+          \        {\r
+
+          \            \"Description\": \"Приватна особа\",\r
+
+          \            \"Ref\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \            \"City\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \            \"Counterparty\": \"00000000-0000-0000-0000-000000000000\",\r
+
+          \            \"FirstName\": \"Приватна особа\",\r
+
+          \            \"LastName\": \"\",\r
+
+          \            \"MiddleName\": \"\",\r
+
+          \            \"CounterpartyFullName\": \"\",\r
+
+          \            \"OwnershipFormRef\": \"\",\r
+
+          \            \"OwnershipFormDescription\": \"\",\r
+
+          \            \"EDRPOU\": \"\",\r
+
+          \            \"CounterpartyType\": \"PrivatePerson\",\r
+
+          \            \"TrustedCounterpartyType\": \"\",\r
+
+          \            \"CityDescription\": \"\"\r
+
+          \        }\r
+
+          \    ],\r
+
+          \    \"errors\": [],\r
+
+          \    \"warnings\": [],\r
+
+          \    \"info\": {\r
+
+          \        \"totalCount\": 1\r
+
+          \    },\r
+
+          \    \"messageCodes\": [],\r
+
+          \    \"errorCodes\": [],\r
+
+          \    \"warningCodes\": [],\r
+
+          \    \"infoCodes\": []\r
+
+          }"
+  - name: Bad Request
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"apiKey\": \"{{apiKey}}\",\r
+
+          \t\"modelName\": \"CounterpartyGeneral\",\r
+
+          \t\"calledMethod\": \"getCounterparties\",\r
+
+          \t\"methodProperties\": {\r
+
+          \t\t\"CounterpartyProperty\": \"None\"\r
+
+          \t}\r
+
+          }"
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "{\r
+
+          \t\"success\": false,\r
+
+          \t\"data\": [],\r
+
+          \t\"errors\": [\r
+
+          \t\t\"CounterpartyProperty is invalid\"\r
+
+          \t],\r
+
+          \t\"warnings\": [],\r
+
+          \t\"info\": [],\r
+
+          \t\"messageCodes\": [],\r
+
+          \t\"errorCodes\": [\r
+
+          \t\t\"20000900772\"\r
+
+          \t],\r
+
+          \t\"warningCodes\": [],\r
+
+          \t\"infoCodes\": []\r
+
+          }"
+  - name: Unauthorized
+    request:
+      url: "{{baseUrl}}"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+          	"apiKey": "00000000-0000-0000-0000-000000000000",
+          	"modelName": "CounterpartyGeneral",
+          	"calledMethod": "getCounterparties",
+          	"methodProperties": {
+          		"CounterpartyProperty": "Sender"
+          	}
+          }
+    response:
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+              "success": false,
+              "data": [],
+              "errors": [
+                  "API key expired"
+              ],
+              "warnings": [],
+              "info": [],
+              "messageCodes": [],
+              "errorCodes": [
+                  "20000201204"
+              ],
+              "warningCodes": [],
+              "infoCodes": []
+          }
+
+docs: |-
+  # 🏢 Get Counterparties (Senders, Recipients, Third Parties)
+
+  This method belongs to the `Counterparty` model (called using `CounterpartyGeneral` in the payload). It retrieves a list of counterparties associated with your API key. You can use it to fetch your senders, saved recipients, or third-party payers.
+
+  💡 **Best Practice for Setup (Getting your Sender Ref):**  
+  This is the **very first method** you should run when setting up your integration.
+
+  1. Run this request with `"CounterpartyProperty": "Sender"`.
+      
+  2. Find your business profile in the response and copy its `Ref`.
+      
+  3. Save this UUID in your Postman Environment as `{{senderRef}}`.
+      
+  4. Send request to the`getCounterpartyContactPersons` method to find your specific human contact UUID (`{{contactSenderRef}}`).
+      
+
+  _Note: The official API documentation recommends updating this directory daily. However, if you are a standard e-commerce store shipping from a single business profile, you only need to run this method ONCE to get your IDs and save it in your environment variables. You do not need to build a daily sync script for this._
+
+  ---
+
+  ## 📥 Request Parameters (`methodProperties`)
+
+  | Parameter | Type | Required | Description |
+  | --- | --- | --- | --- |
+  | `CounterpartyProperty` | String | **Yes** | The role of the counterparty. Use `"Sender"`, `"Recipient"`, or `"ThirdPerson"`. |
+  | `Page` | String | No | Page number for pagination (e.g., "1"). Required if results exceed 100. |
+  | `FindByString` | String | No | Search by exact string. You can input the counterparty's name (e.g., "Талісман") or EDRPOU code. |
+
+  ### Example Request Body
+
+  ``` json
+  {
+     "apiKey": "{{apiKey}}",
+     "modelName": "CounterpartyGeneral",
+     "calledMethod": "getCounterparties",
+     "methodProperties": {
+        "CounterpartyProperty": "Sender",
+        "Page": "1"
+     }
+  }
+
+   ```
+
+  ## 📤 Response Parameters (`data` array items)
+
+  | Parameter | Type | Description |
+  | --- | --- | --- |
+  | Ref | String | Counterparty UUID (store as `{{senderRef}}`) |
+  | Description | String | Full name or business name (UA) |
+  | FirstName | String | First name |
+  | MiddleName | String | Middle name (patronymic) |
+  | LastName | String | Last name |
+  | CounterpartyType | String | Entity type (e.g., "PrivatePerson", "Organization") |
+  | OwnershipFormRef | String | Ownership form UUID |
+  | OwnershipFormDescription | String | Ownership form (e.g., "ТОВ", "ФОП") |
+  | EDRPOU | String | Company registration code |
+  | City | String | City UUID |
+  | info.totalCount | Number | Total number of counterparties |
+
+  ### Example Response Body
+
+  ``` json
+  {
+      "success": true,
+      "data": [
+          {
+              "Description": "Приватна особа",
+              "Ref": "00000000-0000-0000-0000-000000000000",
+              "City": "00000000-0000-0000-0000-000000000000",
+              "Counterparty": "00000000-0000-0000-0000-000000000000",
+              "FirstName": "Приватна особа",
+              "LastName": "",
+              "MiddleName": "",
+              "CounterpartyFullName": "",
+              "OwnershipFormRef": "",
+              "OwnershipFormDescription": "",
+              "EDRPOU": "",
+              "CounterpartyType": "PrivatePerson",
+              "TrustedCounterpartyType": "",
+              "CityDescription": ""
+          }
+      ],
+      "errors": [],
+      "warnings": [],
+      "info": {
+          "totalCount": 1
+      },
+      "messageCodes": [],
+      "errorCodes": [],
+      "warningCodes": [],
+      "infoCodes": []
+  }
+
+   ```
