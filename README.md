@@ -2,12 +2,13 @@
 
 You can run and test our endpoints completely free of charge using any tool you prefer. No paid subscriptions or cloud limits required:
 
-### Option 1. Via Postman 🚀 (One-Click Import)
-If you prefer Postman, click the button below to automatically import a copy of the collection into your free account:
+### Option 1. Via Postman 🚀 (Download & Manual Import)
+Click the button below to view and download the Postman collection file directly from this repository:
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://github.com/qu1etness/novaposhta-api/blob/main/api-collection.postman_collection.json)
 
-*Alternatively, you can download the `api-collection.postman_collection.json` file from this repository and manually drag-and-drop it into Postman via the "Import" button.*
+> 💡 **Note:** Clicking the button will take you directly to the `api-collection.postman_collection.json` file in this repository. 
+> To use it: download the file, open your **Postman** app, click the **Import** button in the top-left corner, and drag-and-drop the downloaded file.
 
 ---
 
