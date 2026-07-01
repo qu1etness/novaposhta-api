@@ -12,7 +12,7 @@ If you prefer Postman, click the button below to automatically import a copy of 
 ---
 
 ### Option 2. Via Bruno 🌿 (Open-Source & Local via YAML)
-We have also saved the collection using the modern **OpenCollection YAML standard**. This allows you to track API changes in Git and run requests locally without any cloud synchronization limits.
+I have also saved the collection using the modern **OpenCollection YAML standard**. This allows you to track API changes in Git and run requests locally without any cloud synchronization limits.
 
 1. Download and install the free, open-source [Bruno](https://www.usebruno.com/) app.
 2. Clone this repository to your local machine.
